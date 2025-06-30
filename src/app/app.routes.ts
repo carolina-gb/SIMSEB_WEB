@@ -1,18 +1,27 @@
-import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
-import { LoginComponent } from './auth/login/login.component';
+import { Routes } from '@angular/router';
+import { LayoutComponent } from './shared/components/layout/layout.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
-import { AuthGuard } from './shared/guards/auth.guard';
+import { LoginComponent } from './auth/login/login.component';
+// ...otros componentes
 
 export const routes: Routes = [
-  { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
-  { path: 'login', component: LoginComponent },
-  { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard] },
-  { path: '**', redirectTo: 'dashboard' }
-];
+  // Redirección por defecto: root => login
+  { path: '', pathMatch: 'full', redirectTo: 'login' },
 
-@NgModule({
-  imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
-})
-export class AppRoutingModule {}
+  // Rutas públicas (login, registro)
+  { path: 'login', component: LoginComponent },
+  // { path: 'register', component: RegisterComponent },
+
+  // Rutas privadas (dashboard y otras bajo layout)
+  {
+    path: '',
+    component: LayoutComponent,
+    children: [
+      { path: 'dashboard', component: DashboardComponent },
+      // más rutas privadas
+    ],
+  },
+
+  // Ruta comodín (opcional: para 404)
+  // { path: '**', redirectTo: 'login' }
+];

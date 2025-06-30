@@ -1,0 +1,23 @@
+<aside
+  class="bg-white w-64 h-full shadow-lg transition-transform duration-300"
+  [ngClass]="{
+    'fixed top-0 left-0 z-40 transform': true,
+    '-translate-x-full': !open,
+    'translate-x-0': open,
+    'md:translate-x-0': true
+  }"
+>
+  <div class="p-4">
+    <h2 class="text-xl font-semibold mb-4">Menú</h2>
+    <ul class="space-y-2">
+      <li><a routerLink="/dashboard" class="block">Dashboard</a></li>
+      <li><a routerLink="/reportes" class="block">Reportes</a></li>
+      <!-- Más enlaces -->
+    </ul>
+    <!-- Botón cerrar para móvil -->
+    <button
+      class="block md:hidden mt-4 text-red-600"
+      (click)="closeSidebar.emit()"
+    >Cerrar</button>
+  </div>
+</aside>
