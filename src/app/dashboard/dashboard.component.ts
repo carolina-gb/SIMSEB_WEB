@@ -1,17 +1,19 @@
 import { Component } from '@angular/core';
-import { AuthService } from '../auth/auth.service';
-
+import { NgIf, NgClass } from '@angular/common';
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [],
   templateUrl: './dashboard.component.html',
-  styleUrl: './dashboard.component.css'
+  styleUrls: ['./dashboard.component.css'],
+  imports: [
+    NgIf, 
+    NgClass,
+  ],
 })
 export class DashboardComponent {
-  constructor(private authService: AuthService) { }
+  isSidebarOpen = false;
 
-  logout(): void {
-    this.authService.logout();
+  toggleSidebar() {
+    this.isSidebarOpen = !this.isSidebarOpen;
   }
 }
