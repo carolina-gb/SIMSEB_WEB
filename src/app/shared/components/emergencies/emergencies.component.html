@@ -1,0 +1,17 @@
+<div class="rounded-2xl bg-white shadow p-8 flex-1 min-h-[220px] flex flex-col">
+  <h4 class="font-semibold text-lg mb-4">Emergencias</h4>
+  <table class="w-full text-base">
+    <thead>
+      <tr>
+        <th class="text-left text-gray-500 font-normal pb-2">Número de emergencia</th>
+        <th class="text-left text-gray-500 font-normal pb-2">Usuario</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let eme of emergencies" class="border-t last:border-b-0 border-gray-100">
+        <td class="py-2">{{ eme.code }}</td>
+        <td class="py-2">{{ eme.user }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>

@@ -1,5 +1,8 @@
-<section>
-  <h2 class="text-2xl font-bold mb-4">Bienvenido al Dashboard</h2>
-  <!-- Aquí tu contenido real del dashboard -->
-  <p>Contenido de estadísticas, tarjetas, tablas, gráficos, etc.</p>
-</section>
+<h1 class="text-lg font-bold py-4 px-32">Sistema de seguridad Barrial</h1>
+<div class="flex flex-col gap-8 px-32">
+  <app-report-chart></app-report-chart>
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-20">
+  <app-emergencies [emergencies]="emergencies" class="h-full"></app-emergencies>
+  <app-active-users [users]="users" class="h-full"></app-active-users>
+</div>
+</div>

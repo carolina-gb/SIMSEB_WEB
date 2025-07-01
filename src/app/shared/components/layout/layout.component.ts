@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { NgIf } from '@angular/common';
+import { NgClass, NgIf } from '@angular/common';
 import { HeaderComponent } from '../header/header.component';
 import { SidebarComponent } from '../sidebar/sidebar.component';
 
@@ -9,12 +9,16 @@ import { SidebarComponent } from '../sidebar/sidebar.component';
   standalone: true,
   templateUrl: './layout.component.html',
   styleUrls: ['./layout.component.css'],
-  imports: [RouterOutlet, NgIf, HeaderComponent, SidebarComponent],
+  imports: [RouterOutlet, NgClass, NgIf, HeaderComponent, SidebarComponent],
 })
 export class LayoutComponent {
   isSidebarOpen = false;
 
   toggleSidebar() {
     this.isSidebarOpen = !this.isSidebarOpen;
+  }
+
+  closeSidebar() {
+    this.isSidebarOpen = false;
   }
 }
