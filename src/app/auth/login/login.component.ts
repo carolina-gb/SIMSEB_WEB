@@ -7,7 +7,7 @@ import { CommonModule } from '@angular/common';
 @Component({
     selector: 'app-login', // 🔥 ESTA ES LA CLAVE
     templateUrl: './login.component.html',
-    styleUrls: ['./login.component.scss'],
+    styleUrls: ['./login.component.css'],
     imports: [FormsModule, CommonModule]
 })
 export class LoginComponent {
