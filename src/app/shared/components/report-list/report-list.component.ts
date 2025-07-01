@@ -33,6 +33,21 @@ export class ReportListComponent {
     },
   ];
 
+  reportPage = 1;
+  reportPageSize = 5;
+
+  get pagedReports() {
+    const start = (this.reportPage - 1) * this.reportPageSize;
+    return this.reports.slice(start, start + this.reportPageSize);
+  }
+  get reportTotalPages() {
+    return Math.ceil(this.reports.length / this.reportPageSize);
+  }
+  changeReportPage(newPage: number) {
+    if (newPage < 1 || newPage > this.reportTotalPages) return;
+    this.reportPage = newPage;
+  }
+
   getStatusClass(status: string) {
     switch (status) {
       case 'Pendiente':

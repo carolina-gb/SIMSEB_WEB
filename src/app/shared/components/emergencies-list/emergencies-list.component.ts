@@ -33,6 +33,22 @@ export class EmergenciesListComponent {
     },
   ];
 
+  emergencyPage = 1;
+  emergencyPageSize = 5;
+
+  get pagedEmergencies() {
+    const start = (this.emergencyPage - 1) * this.emergencyPageSize;
+    return this.emergencies.slice(start, start + this.emergencyPageSize);
+  }
+  get emergencyTotalPages() {
+    return Math.ceil(this.emergencies.length / this.emergencyPageSize);
+  }
+  changeEmergencyPage(newPage: number) {
+    if (newPage < 1 || newPage > this.emergencyTotalPages) return;
+    this.emergencyPage = newPage;
+  }
+
+  // Ejemplo de getStatusClass (opcional, personalízalo como quieras)
   getStatusClass(status: string) {
     switch (status) {
       case 'Pendiente':

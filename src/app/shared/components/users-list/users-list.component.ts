@@ -36,14 +36,28 @@ export class UsersListComponent {
     },
   ];
 
+  userPage = 1;
+  userPageSize = 5;
+
+  get pagedUsers() {
+    const start = (this.userPage - 1) * this.userPageSize;
+    return this.users.slice(start, start + this.userPageSize);
+  }
+  get userTotalPages() {
+    return Math.ceil(this.users.length / this.userPageSize);
+  }
+  changeUserPage(newPage: number) {
+    if (newPage < 1 || newPage > this.userTotalPages) return;
+    this.userPage = newPage;
+  }
+
+  // Ejemplo getStatusClass:
   getStatusClass(status: string) {
     switch (status) {
-      case 'Pendiente':
-        return 'bg-gray-100 text-gray-700';
-      case 'Inactivo':
-        return 'bg-gray-100 text-red-500';
       case 'Activo':
-        return 'bg-gray-100 text-green-600';
+        return 'bg-green-100 text-green-600';
+      case 'Inactivo':
+        return 'bg-red-100 text-red-600';
       default:
         return 'bg-gray-100 text-gray-700';
     }
