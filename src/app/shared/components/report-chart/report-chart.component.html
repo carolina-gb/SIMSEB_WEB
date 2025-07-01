@@ -1,14 +1,22 @@
-<div class="rounded-2xl bg-white shadow p-6 mb-6">
-  <div class="flex items-center justify-between mb-2">
-    <h3 class="font-semibold">Total de reportes</h3>
-    <div class="flex gap-4 text-sm font-medium text-gray-400">
+<div class="rounded-2xl bg-white shadow p-8 mb-8 min-h-[280px]">
+  <div class="flex items-center justify-between mb-4">
+    <h3 class="font-semibold text-lg">Total de reportes</h3>
+    <div class="flex gap-6 text-base font-medium text-gray-400 select-none">
       <span class="text-blue-600 cursor-pointer">Today</span>
       <span class="cursor-pointer">1d</span>
       <span class="cursor-pointer">7d</span>
     </div>
   </div>
-  <!-- Aquí luego puedes poner tu gráfico real -->
-  <div class="h-48 flex items-center justify-center">
-    <span class="text-purple-400">[Gráfico de reportes aquí]</span>
-  </div>
+  <apx-chart
+  [series]="series"
+  [chart]="chart"
+  [stroke]="stroke"
+  [fill]="fill"
+  [xaxis]="xaxis"
+  [yaxis]="yaxis"
+  [dataLabels]="dataLabels"
+  [grid]="grid"
+  [legend]="legend"
+  class="w-full"
+></apx-chart>
 </div>

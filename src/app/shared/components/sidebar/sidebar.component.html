@@ -1,16 +1,67 @@
-<aside
-  class="bg-white w-64 h-full shadow-lg transition-transform duration-300 fixed top-0 left-0 z-40 flex flex-col"
->
-  <div class="p-4 flex-1">
-    <h2 class="text-xl font-semibold mb-4">Menú</h2>
-    <ul class="space-y-2">
-      <li><a routerLink="/dashboard" class="block">Dashboard</a></li>
-      <li><a routerLink="/reportes" class="block">Reportes</a></li>
-      <!-- Más enlaces -->
-    </ul>
+<aside class="fixed top-0 left-0 w-64 h-screen bg-white shadow-lg flex flex-col rounded-tl-2xl rounded-bl-2xl px-6 py-8">
+  <!-- Logo y nombre -->
+  <div class="flex items-center gap-3 mb-10">
+    <img src="https://i.ibb.co/wRqM5BC/logo-orange.png" alt="Logo" class="h-9 w-9 rounded-full" />
+    <span class="font-bold text-xl text-slate-700">light</span>
   </div>
-  <button
-    class="block mt-4 mx-auto mb-6 text-red-600"
-    (click)="closeSidebar.emit()"
-  >Cerrar</button>
+  <!-- Navegación -->
+  <nav class="flex flex-col gap-3">
+    <a
+      routerLink="/dashboard"
+      routerLinkActive="bg-blue-50 text-blue-700"
+      [routerLinkActiveOptions]="{ exact: true }"
+      class="flex items-center gap-3 rounded-xl px-3 py-2 font-medium text-base text-slate-600 transition hover:bg-blue-50"
+    >
+      <i data-lucide="layout-dashboard" class="w-5 h-5"></i>
+      Dashboards
+    </a>
+    <a
+      routerLink="/reportes"
+      routerLinkActive="bg-blue-50 text-blue-700"
+      class="flex items-center gap-3 rounded-xl px-3 py-2 font-medium text-base text-slate-600 transition hover:bg-blue-50"
+    >
+      <i data-lucide="folder" class="w-5 h-5"></i>
+      Reportes
+    </a>
+    <a
+      routerLink="/emergencias"
+      routerLinkActive="bg-blue-50 text-blue-700"
+      class="flex items-center gap-3 rounded-xl px-3 py-2 font-medium text-base text-slate-600 transition hover:bg-blue-50"
+    >
+      <i data-lucide="mail-question" class="w-5 h-5"></i>
+      Emergencias
+    </a>
+    <a
+      routerLink="/infraccion"
+      routerLinkActive="bg-blue-50 text-blue-700"
+      class="flex items-center gap-3 rounded-xl px-3 py-2 font-medium text-base text-slate-600 transition hover:bg-blue-50"
+    >
+      <i data-lucide="badge-dollar-sign" class="w-5 h-5"></i>
+      Infracción
+    </a>
+    <a
+      routerLink="/usuarios"
+      routerLinkActive="bg-blue-50 text-blue-700"
+      class="flex items-center gap-3 rounded-xl px-3 py-2 font-medium text-base text-slate-600 transition hover:bg-blue-50"
+    >
+      <i data-lucide="users" class="w-5 h-5"></i>
+      Usuarios
+    </a>
+    <a
+      routerLink="/archivos"
+      routerLinkActive="bg-blue-50 text-blue-700"
+      class="flex items-center gap-3 rounded-xl px-3 py-2 font-medium text-base text-slate-600 transition hover:bg-blue-50"
+    >
+      <i data-lucide="archive" class="w-5 h-5"></i>
+      Archivos
+    </a>
+    <div class="flex-1"></div>
+    <a
+      (click)="logout()"
+      class="flex items-center gap-3 rounded-xl px-3 py-2 font-medium text-base text-slate-600 transition hover:bg-blue-50 mb-2 cursor-pointer"
+    >
+      <i data-lucide="log-out" class="w-5 h-5"></i>
+      Cerrar Sesión
+    </a>
+  </nav>
 </aside>

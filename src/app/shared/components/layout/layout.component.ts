@@ -1,4 +1,4 @@
-import { NgClass, NgIf } from '@angular/common';
+import { NgIf } from '@angular/common';
 import { Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { HeaderComponent } from '../header/header.component';
@@ -7,7 +7,7 @@ import { SidebarComponent } from '../sidebar/sidebar.component';
   standalone: true,
   selector: 'app-layout',
   templateUrl: './layout.component.html',
-  imports: [RouterModule, NgClass, NgIf, HeaderComponent, SidebarComponent]
+  imports: [RouterModule, NgIf, HeaderComponent, SidebarComponent]
 })
 export class LayoutComponent {
   isSidebarOpen = false;
