@@ -3,10 +3,9 @@ import { Component, Input } from '@angular/core';
 import { NgFor } from '@angular/common';
 
 @Component({
-  selector: 'app-active-users',
-  standalone: true,
-  templateUrl: './active-users.component.html',
-  imports: [NgFor]
+    selector: 'app-active-users',
+    templateUrl: './active-users.component.html',
+    imports: [NgFor]
 })
 export class ActiveUsersComponent {
   @Input() users: Array<{ name: string; reports: number }> = [

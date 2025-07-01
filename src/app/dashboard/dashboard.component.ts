@@ -5,10 +5,9 @@ import { EmergenciesComponent } from '../shared/components/emergencies/emergenci
 import { ActiveUsersComponent } from '../shared/components/active-users/active-users.component';
 
 @Component({
-  selector: 'app-dashboard',
-  standalone: true,
-  imports: [ReportChartComponent, EmergenciesComponent, ActiveUsersComponent],
-  templateUrl: './dashboard.component.html',
+    selector: 'app-dashboard',
+    imports: [ReportChartComponent, EmergenciesComponent, ActiveUsersComponent],
+    templateUrl: './dashboard.component.html'
 })
 export class DashboardComponent {
   emergencies = [

@@ -5,11 +5,10 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 
 @Component({
-  selector: 'app-login',
-  standalone: true, // 🔥 ESTA ES LA CLAVE
-  templateUrl: './login.component.html',
-  styleUrls: ['./login.component.scss'],
-  imports: [FormsModule, CommonModule]
+    selector: 'app-login', // 🔥 ESTA ES LA CLAVE
+    templateUrl: './login.component.html',
+    styleUrls: ['./login.component.scss'],
+    imports: [FormsModule, CommonModule]
 })
 export class LoginComponent {
   username = '';

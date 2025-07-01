@@ -3,10 +3,9 @@ import { Component, Input } from '@angular/core';
 import { NgFor } from '@angular/common';
 
 @Component({
-  selector: 'app-emergencies',
-  standalone: true,
-  templateUrl: './emergencies.component.html',
-  imports: [NgFor]
+    selector: 'app-emergencies',
+    templateUrl: './emergencies.component.html',
+    imports: [NgFor]
 })
 export class EmergenciesComponent {
   @Input() emergencies: Array<{ code: string; user: string }> = [
