@@ -6,6 +6,7 @@ import { ReportsComponent } from './modules/reports/reports.component';
 import { InfractionsComponent } from './modules/infractions/infractions.component';
 import { EmergenciesComponent } from './modules/emergencies/emergencies.component';
 import { UsersComponent } from './modules/users/users.component';
+import { ReportDetailsComponent } from './modules/report-details/report-details.component';
 // ...otros componentes
 
 export const routes: Routes = [
@@ -26,6 +27,7 @@ export const routes: Routes = [
       { path: 'infractions', component: InfractionsComponent },
       { path: 'emergencies', component: EmergenciesComponent },
       { path: 'users', component: UsersComponent },
+      { path: 'reports/:id', component: ReportDetailsComponent },
       // más rutas privadas
     ],
   },

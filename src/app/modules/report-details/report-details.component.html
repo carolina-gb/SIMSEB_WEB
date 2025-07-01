@@ -1,0 +1,90 @@
+<div class="bg-gray-100">
+  <h2 class="text-2xl font-bold mb-6 text-gray-700">Editar reporte</h2>
+  <div
+    class="bg-white rounded-2xl shadow p-6 mx-auto flex flex-col md:flex-row gap-10 min-h-[550px] max-h-[550px]"
+  >
+    <!-- Columna Izquierda -->
+    <div class="flex-1 p-4">
+      <div class="flex items-center justify-between mb-4">
+        <div>
+          <span class="font-semibold">Número del reporte:</span>
+          <span class="ml-2 text-gray-700">REP-001</span>
+        </div>
+      </div>
+
+      <div class="mb-4">
+        <div class="font-semibold mb-2">Descripción</div>
+        <div class="bg-gray-100 rounded-lg p-4 text-gray-600 text-sm">
+          En la casa de 2 pisos de color blanco, hay un grupo de personas
+          tomando y un carro con parlantes al tope de volumen, incluso se dicen
+          groserías, ya se les habló y fueron groseros respondiendo.
+        </div>
+      </div>
+
+      <!-- Combo para estado -->
+      <div class="mb-4">
+        <label class="block font-semibold mb-2" for="estado">Estado</label>
+        <select
+          id="estado"
+          [(ngModel)]="selectedStatus"
+          class="border rounded-lg p-2 w-full bg-gray-50"
+        >
+          <option value="Pendiente">Pendiente</option>
+          <option value="En progreso">En progreso</option>
+          <option value="Rechazado">Rechazado</option>
+          <option value="Resuelto">Resuelto</option>
+        </select>
+      </div>
+
+      <!-- Si es rechazado, mostrar motivo -->
+      <div class="mb-4" *ngIf="selectedStatus === 'Rechazado'">
+        <label class="block font-semibold mb-2" for="motivoRechazo"
+          >Razón del rechazo</label
+        >
+        <textarea
+          id="motivoRechazo"
+          rows="4"
+          [(ngModel)]="motivoRechazo"
+          class="bg-gray-100 w-full rounded-lg p-4 resize-none"
+          placeholder="Escribe aquí el motivo del rechazo..."
+        ></textarea>
+      </div>
+
+      <!-- Botón guardar -->
+      <button
+        (click)="guardarCambios()"
+        class="bg-blue-600 text-white font-semibold px-6 py-2 rounded-lg hover:bg-blue-700 transition absolute bottom-6"
+      >
+        Guardar cambios
+      </button>
+    </div>
+
+    <!-- Columna Derecha: Timeline como componente -->
+    <div
+      class="flex-[0.9] flex flex-col items-center md:items-center relative bg-white pt-10"
+    >
+      <!-- Botón en la esquina superior derecha -->
+      <button
+        class="absolute top-2 right-2 border rounded-lg px-4 py-1 text-gray-600 hover:bg-gray-50 flex items-center gap-2"
+        (click)="goToBack()"
+      >
+        <svg
+          class="w-4 h-4"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M15 19l-7-7 7-7"
+          />
+        </svg>
+        Regresar
+      </button>
+      <!-- Timeline o contenido principal -->
+      <app-tracking-timeline [steps]="trackingSteps"></app-tracking-timeline>
+    </div>
+  </div>
+</div>

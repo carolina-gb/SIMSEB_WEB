@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-report-list',
@@ -9,6 +10,7 @@ import { CommonModule } from '@angular/common';
   imports: [CommonModule],
 })
 export class ReportListComponent {
+  constructor(private router: Router) {}
   reports = [
     {
       code: 'REP-001',
@@ -59,5 +61,9 @@ export class ReportListComponent {
       default:
         return 'bg-gray-100 text-gray-700';
     }
+  }
+
+  goToDetail(reportId: string) {
+    this.router.navigate(['/reports', reportId]);
   }
 }

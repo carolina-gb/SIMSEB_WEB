@@ -1,19 +1,29 @@
 <div class="bg-gray-100 pt-1">
   <div class="max-w-6xl mx-auto px-2 sm:px-4 lg:px-8">
     <h2 class="text-xl font-bold mb-6 text-gray-700">Listado de reportes</h2>
-    
+
     <!-- Tabla desktop -->
     <div class="hidden md:block bg-white rounded-2xl shadow p-4 sm:p-6">
       <div class="overflow-x-auto min-w-[700px] min-h-[340px]">
         <table class="w-full border-separate border-spacing-0 text-sm">
           <thead>
             <tr>
-              <th class="px-4 py-2 text-left font-semibold border-b">N° de reporte</th>
-              <th class="px-4 py-2 text-left font-semibold border-b">Nombre de usuario</th>
-              <th class="px-4 py-2 text-left font-semibold border-b">Tipo de reporte</th>
-              <th class="px-4 py-2 text-left font-semibold border-b">Fecha de creación</th>
+              <th class="px-4 py-2 text-left font-semibold border-b">
+                N° de reporte
+              </th>
+              <th class="px-4 py-2 text-left font-semibold border-b">
+                Nombre de usuario
+              </th>
+              <th class="px-4 py-2 text-left font-semibold border-b">
+                Tipo de reporte
+              </th>
+              <th class="px-4 py-2 text-left font-semibold border-b">
+                Fecha de creación
+              </th>
               <th class="px-4 py-2 text-left font-semibold border-b">Estado</th>
-              <th class="px-4 py-2 text-left font-semibold border-b">Detalles</th>
+              <th class="px-4 py-2 text-left font-semibold border-b">
+                Detalles
+              </th>
             </tr>
           </thead>
           <tbody>
@@ -21,11 +31,16 @@
               <td class="px-4 py-3 border-b">{{ report.code }}</td>
               <td class="px-4 py-3 border-b">{{ report.user }}</td>
               <td class="px-4 py-3 border-b">
-                <span class="block bg-gray-100 px-3 py-1 rounded">{{ report.type }}</span>
+                <span class="block bg-gray-100 px-3 py-1 rounded">{{
+                  report.type
+                }}</span>
               </td>
               <td class="px-4 py-3 border-b">{{ report.date }}</td>
               <td class="px-4 py-3 border-b">
-                <span [ngClass]="getStatusClass(report.status)" class="px-4 py-1 rounded-full border text-xs font-medium">
+                <span
+                  [ngClass]="getStatusClass(report.status)"
+                  class="px-4 py-1 rounded-full border text-xs font-medium"
+                >
                   {{ report.status }}
                 </span>
               </td>
@@ -33,13 +48,29 @@
                 <div class="flex gap-2">
                   <!-- Iconos acción -->
                   <button class="hover:text-blue-600" title="Ver">
-                    <!-- ...svg... -->
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
+                      viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                    </svg>
                   </button>
-                  <button class="hover:text-yellow-600" title="Editar">
-                    <!-- ...svg... -->
+                  <button class="hover:text-yellow-600" title="Editar" (click)="goToDetail(report.code)">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
+                      viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M15.232 5.232l3.536 3.536M9 13h3l8-8a2.828 2.828 0 00-4-4l-8 8v3z" />
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M16 21H4a1 1 0 01-1-1v-4a1 1 0 011-1h12a1 1 0 011 1v4a1 1 0 01-1 1z" />
+                    </svg>
                   </button>
                   <button class="hover:text-red-600" title="Eliminar">
-                    <!-- ...svg... -->
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
+                      viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M6 18L18 6M6 6l12 12" />
+                    </svg>
                   </button>
                 </div>
               </td>
@@ -61,7 +92,9 @@
         </div>
         <div>
           <span class="font-semibold">Tipo:</span>
-          <span class="ml-2 bg-gray-100 px-2 py-1 rounded text-xs">{{ report.type }}</span>
+          <span class="ml-2 bg-gray-100 px-2 py-1 rounded text-xs">{{
+            report.type
+          }}</span>
         </div>
         <div>
           <span class="font-semibold">Fecha:</span>
@@ -69,8 +102,10 @@
         </div>
         <div>
           <span class="font-semibold">Estado:</span>
-          <span class="ml-2 px-2 py-1 rounded-full border text-xs font-medium"
-                [ngClass]="getStatusClass(report.status)">
+          <span
+            class="ml-2 px-2 py-1 rounded-full border text-xs font-medium"
+            [ngClass]="getStatusClass(report.status)"
+          >
             {{ report.status }}
           </span>
         </div>
@@ -83,26 +118,32 @@
     <!-- Paginador -->
     <div class="flex items-center justify-center mt-8 gap-2">
       <button
-        class="px-3 py-1 rounded border border-gray-200 shadow bg-white hover:bg-gray-100 transition
-        disabled:opacity-40 disabled:cursor-not-allowed"
+        class="px-3 py-1 rounded border border-gray-200 shadow bg-white hover:bg-gray-100 transition disabled:opacity-40 disabled:cursor-not-allowed"
         [disabled]="reportPage === 1"
         (click)="changeReportPage(reportPage - 1)"
-      >Anterior</button>
-      <ng-container *ngFor="let p of [].constructor(reportTotalPages); let i = index">
+      >
+        Anterior
+      </button>
+      <ng-container
+        *ngFor="let p of [].constructor(reportTotalPages); let i = index"
+      >
         <button
           class="px-3 py-1 rounded border border-gray-200 shadow hover:bg-gray-100 transition"
           [ngClass]="{
             'bg-blue-600 text-white border-blue-600': reportPage === i + 1
           }"
           (click)="changeReportPage(i + 1)"
-        >{{ i + 1 }}</button>
+        >
+          {{ i + 1 }}
+        </button>
       </ng-container>
       <button
-        class="px-3 py-1 rounded border border-gray-200 shadow bg-white hover:bg-gray-100 transition
-        disabled:opacity-40 disabled:cursor-not-allowed"
+        class="px-3 py-1 rounded border border-gray-200 shadow bg-white hover:bg-gray-100 transition disabled:opacity-40 disabled:cursor-not-allowed"
         [disabled]="reportPage === reportTotalPages"
         (click)="changeReportPage(reportPage + 1)"
-      >Siguiente</button>
+      >
+        Siguiente
+      </button>
     </div>
   </div>
 </div>
