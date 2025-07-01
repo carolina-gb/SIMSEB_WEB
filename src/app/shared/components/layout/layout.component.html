@@ -14,7 +14,8 @@
 <!-- Contenido principal -->
 <div class="min-h-screen bg-gray-100">
   <app-header (toggleMenu)="toggleSidebar()"></app-header>
-  <main class="p-6">
-    <router-outlet></router-outlet>
-  </main>
+
+  <div class="max-w-7xl mx-auto py-20 px-8">
+      <router-outlet></router-outlet>
+  </div>
 </div>
