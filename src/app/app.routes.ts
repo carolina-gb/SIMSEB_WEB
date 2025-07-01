@@ -1,7 +1,11 @@
 import { Routes } from '@angular/router';
 import { LayoutComponent } from './shared/components/layout/layout.component';
-import { DashboardComponent } from './dashboard/dashboard.component';
-import { LoginComponent } from './auth/login/login.component';
+import { DashboardComponent } from './modules/dashboard/dashboard.component';
+import { LoginComponent } from './modules/auth/login/login.component';
+import { ReportsComponent } from './modules/reports/reports.component';
+import { InfractionsComponent } from './modules/infractions/infractions.component';
+import { EmergenciesComponent } from './modules/emergencies/emergencies.component';
+import { UsersComponent } from './modules/users/users.component';
 // ...otros componentes
 
 export const routes: Routes = [
@@ -18,6 +22,10 @@ export const routes: Routes = [
     component: LayoutComponent,
     children: [
       { path: 'dashboard', component: DashboardComponent },
+      { path: 'reports', component: ReportsComponent },
+      { path: 'infractions', component: InfractionsComponent },
+      { path: 'emergencies', component: EmergenciesComponent },
+      { path: 'users', component: UsersComponent },
       // más rutas privadas
     ],
   },

@@ -1,14 +1,15 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { AuthService } from '../../shared/services/auth.service';
-import { FormsModule } from '@angular/forms';
+import { AuthService } from '../../../shared/services/auth.service';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 
 @Component({
-    selector: 'app-login', // 🔥 ESTA ES LA CLAVE
-    templateUrl: './login.component.html',
-    styleUrls: ['./login.component.css'],
-    imports: [FormsModule, CommonModule]
+  standalone: true,
+  selector: 'app-login',
+  templateUrl: './login.component.html',
+  styleUrls: ['./login.component.css'],
+  imports: [FormsModule,CommonModule],
 })
 export class LoginComponent {
   username = '';

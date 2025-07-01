@@ -4,10 +4,11 @@ import { NgFor } from '@angular/common';
 
 @Component({
     selector: 'app-emergencies',
-    templateUrl: './emergencies.component.html',
+    standalone: true,
+    templateUrl: './emergenciesWidget.component.html',
     imports: [NgFor]
 })
-export class EmergenciesComponent {
+export class EmergenciesWidgetComponent {
   @Input() emergencies: Array<{ code: string; user: string }> = [
     { code: 'EME-001', user: 'Ligia León' },
     { code: 'EME-002', user: 'Ronald Neira' },
