@@ -7,6 +7,7 @@ import { InfractionsComponent } from './modules/infractions/infractions.componen
 import { EmergenciesComponent } from './modules/emergencies/emergencies.component';
 import { UsersComponent } from './modules/users/users.component';
 import { ReportDetailsComponent } from './modules/report-details/report-details.component';
+import { UserDetailsComponent } from './modules/user-details/user-details.component';
 // ...otros componentes
 
 export const routes: Routes = [
@@ -28,6 +29,7 @@ export const routes: Routes = [
       { path: 'emergencies', component: EmergenciesComponent },
       { path: 'users', component: UsersComponent },
       { path: 'reports/:id', component: ReportDetailsComponent },
+      { path: 'users/:userId', component: UserDetailsComponent },
       // más rutas privadas
     ],
   },
