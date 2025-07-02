@@ -1,16 +1,19 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
+import { AlertModalComponent } from '../alert-modal/alert-modal.component';
+import { ConfirmModalComponent } from '../confirm-modal/confirm-modal.component';
+import { LoadingSpinnerComponent } from '../loading-spinner/loading-spinner.component';
 
 @Component({
   selector: 'app-report-list',
   standalone: true,
   templateUrl: './report-list.component.html',
   styleUrls: ['./report-list.component.css'],
-  imports: [CommonModule],
+  imports: [CommonModule, AlertModalComponent, ConfirmModalComponent, LoadingSpinnerComponent],
 })
 export class ReportListComponent {
-  constructor(private router: Router) {}
+  constructor(private router: Router) { }
   reports = [
     {
       code: 'REP-001',
@@ -66,4 +69,28 @@ export class ReportListComponent {
   goToDetail(reportId: string) {
     this.router.navigate(['/reports', reportId]);
   }
+
+  showConfirm = false;
+  showSuccess = false;
+
+  eliminarEnProgreso = false;
+
+  eliminarReporte() {
+    this.showConfirm = false;
+    this.eliminarEnProgreso = true;
+    setTimeout(() => {
+      this.eliminarEnProgreso = false;
+
+      this.showSuccess = true;
+    }, 1500); // Simula 1.5s de eliminación
+  }
+
+  onClickEliminar() {
+    this.showConfirm = true;
+  }
+
+  cerrarSuccess() {
+    this.showSuccess = false;
+  }
+
 }
