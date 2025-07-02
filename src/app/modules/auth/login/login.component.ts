@@ -1,26 +1,44 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { AuthService } from '../../../shared/services/auth.service';
+import { ApiService } from '../../../shared/services/services';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { LoadingSpinnerComponent } from '../../../shared/components/loading-spinner/loading-spinner.component';
 
 @Component({
   standalone: true,
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css'],
-  imports: [FormsModule,CommonModule],
+  imports: [FormsModule, CommonModule, LoadingSpinnerComponent],
 })
 export class LoginComponent {
   username = '';
   password = '';
+  loading = false;
+  error = '';
   loginError = false;
 
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(private api: ApiService, private router: Router) { }
 
-  onSubmit(): void {
-    const success = this.authService.login(this.username, this.password);
-    this.loginError = !success;
-    if (success) this.router.navigate(['/dashboard']);
+  get canLogin() {
+    return this.username?.trim() && this.password?.trim();
+  }
+  async onSubmit() {
+    this.error = '';
+    this.loading = true;
+    try {
+      const resp = await this.api.login(this.username, this.password);
+      // Aquí podrías guardar el token si usas auth real
+      // localStorage.setItem('token', resp.token);
+
+      // Redirige al dashboard
+      await this.router.navigate(['/dashboard']);
+    } catch (err: any) {
+      this.loginError = true;
+      this.error = err.message || 'Error de login';
+    } finally {
+      this.loading = false;
+    }
   }
 }

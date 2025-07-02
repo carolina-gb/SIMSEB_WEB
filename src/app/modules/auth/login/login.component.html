@@ -11,14 +11,8 @@
             <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500">
               <i class="fas fa-user"></i>
             </span>
-            <input
-              type="text"
-              name="username"
-              [(ngModel)]="username"
-              required
-              placeholder="Ingrese nombre de usuario"
-              class="w-full pl-10 pr-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
+            <input type="text" name="username" [(ngModel)]="username" required placeholder="Ingrese nombre de usuario"
+              class="w-full pl-10 pr-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500" />
           </div>
         </div>
 
@@ -28,14 +22,8 @@
             <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500">
               <i class="fas fa-lock"></i>
             </span>
-            <input
-              type="password"
-              name="password"
-              [(ngModel)]="password"
-              required
-              placeholder="Ingrese contraseña"
-              class="w-full pl-10 pr-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
+            <input type="password" name="password" [(ngModel)]="password" required placeholder="Ingrese contraseña"
+              class="w-full pl-10 pr-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500" />
           </div>
         </div>
 
@@ -44,10 +32,9 @@
           <label for="remember" class="text-sm text-gray-700">Recuérdame</label>
         </div>
 
-        <button
-          type="submit"
-          class="bg-blue-600 text-white px-10 py-2 rounded hover:bg-blue-700 transition"
-        >
+        <button type="submit" class="bg-blue-600 text-white px-10 py-2 rounded transition
+            hover:bg-blue-700
+            disabled:bg-gray-300 disabled:text-gray-500 disabled:cursor-not-allowed" [disabled]="!canLogin || loading">
           Iniciar sesión
         </button>
 
@@ -63,3 +50,4 @@
     </div>
   </div>
 </div>
+<app-loading-spinner [show]="loading"></app-loading-spinner>
