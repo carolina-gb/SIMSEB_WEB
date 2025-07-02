@@ -11,26 +11,54 @@ import { Component } from '@angular/core';
 export class EmergenciesListComponent {
   emergencies = [
     {
-      code: 'EME-001',
-      user: 'Gabrielym',
-      type: 'Alteración del orden público',
-      date: '2025-05-15',
-      status: 'Pendiente',
+      emergency_id: 1,
+      emergency_number: 'EME-001',
+      user: {
+        user_id: 201,
+        username: 'Gabrielym',
+        full_name: 'Gabriel Yagual',
+        email: 'gabrielyagual@mail.com',
+      },
+      type: {
+        emergency_type_id: 1,
+        name: 'Alteración del orden público',
+      },
+      created_at: '2025-05-15',
+      updated_at: '2025-05-15',
     },
     {
-      code: 'EME-002',
-      user: 'Angienb',
-      type: 'Problemas de salubridad',
-      date: '2025-05-15',
-      status: 'Rechazado',
+      emergency_id: 2,
+      emergency_number: 'EME-002',
+      user: {
+        user_id: 202,
+        username: 'Angienb',
+        full_name: 'Angie Bustos',
+        email: 'angie@mail.com',
+      },
+      type: {
+        emergency_type_id: 2,
+        name: 'Problemas de salubridad',
+      },
+      created_at: '2025-05-15',
+      updated_at: '2025-05-16',
     },
     {
-      code: 'EME-003',
-      user: 'Karenmg',
-      type: 'Problemas con vecinos',
-      date: '2025-05-15',
-      status: 'Resuelto',
+      emergency_id: 3,
+      emergency_number: 'EME-003',
+      user: {
+        user_id: 203,
+        username: 'Karenmg',
+        full_name: 'Karen Montaño',
+        email: 'karen@mail.com',
+      },
+      type: {
+        emergency_type_id: 3,
+        name: 'Problemas con vecinos',
+      },
+      created_at: '2025-05-15',
+      updated_at: '2025-05-17',
     },
+    // ...agrega más si necesitas
   ];
 
   emergencyPage = 1;

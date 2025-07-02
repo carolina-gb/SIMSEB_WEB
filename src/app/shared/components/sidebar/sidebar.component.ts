@@ -1,4 +1,4 @@
-import { Component, AfterViewInit } from '@angular/core';
+import { Component, AfterViewInit, Input, Output, EventEmitter } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 
 declare global {
@@ -14,14 +14,17 @@ declare global {
   imports: [RouterLink, RouterLinkActive], // <-- AGREGA ESTO AQUÍ
 })
 export class SidebarComponent implements AfterViewInit {
+  @Input() open = false; // Controla visibilidad
+  @Output() close = new EventEmitter<void>();
   constructor(private router: Router) {}
-
   ngAfterViewInit() {
     if (window.lucide) {
       window.lucide.createIcons();
     }
   }
-
+  closeSidebar() {
+    this.close.emit();
+  }
   logout() {
     this.router.navigate(['/login']);
   }

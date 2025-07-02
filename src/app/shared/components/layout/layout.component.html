@@ -8,7 +8,8 @@
 <app-sidebar
   *ngIf="isSidebarOpen"
   class="fixed top-0 left-0 z-40 animate-fade-in transition-transform duration-400"
-  (closeSidebar)="closeSidebar()"
+  [open]="isSidebarOpen"
+  (close)="isSidebarOpen = false">
 ></app-sidebar>
 
 <!-- Contenido principal -->

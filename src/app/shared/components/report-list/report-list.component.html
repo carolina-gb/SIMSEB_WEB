@@ -28,45 +28,83 @@
           </thead>
           <tbody>
             <tr *ngFor="let report of pagedReports" class="hover:bg-gray-50">
-              <td class="px-4 py-3 border-b">{{ report.code }}</td>
-              <td class="px-4 py-3 border-b">{{ report.user }}</td>
+              <td class="px-4 py-3 border-b">{{ report.case_number }}</td>
+              <td class="px-4 py-3 border-b">{{ report.user.full_name }}</td>
               <td class="px-4 py-3 border-b">
                 <span class="block bg-gray-100 px-3 py-1 rounded">{{
-                  report.type
-                  }}</span>
+                  report.type.name
+                }}</span>
               </td>
-              <td class="px-4 py-3 border-b">{{ report.date }}</td>
+              <td class="px-4 py-3 border-b">{{ report.created_at }}</td>
               <td class="px-4 py-3 border-b">
-                <span [ngClass]="getStatusClass(report.status)"
-                  class="px-4 py-1 rounded-full border text-xs font-medium">
-                  {{ report.status }}
+                <span
+                  [ngClass]="getStatusClass(report.stage[report.stage.length - 1].name)"
+                  class="px-4 py-1 rounded-full border text-xs font-medium"
+                >
+                  {{ report.stage[report.stage.length - 1].show_name }}
                 </span>
               </td>
               <td class="px-4 py-3 border-b">
                 <div class="flex gap-2">
                   <!-- Iconos acción -->
-                  <button class="hover:text-blue-600" title="Ver">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
-                      stroke="currentColor">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                  <button
+                    class="hover:text-blue-600"
+                    title="Ver"
+                    (click)="
+                      abrirResumen('reporte', {
+                        case_number: report.case_number,
+                        username: report.user.full_name,
+                        description: report.type.name,
+                        stage_name: report.stage,
+                        created_at: report.created_at
+                      })
+                    "
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      class="h-5 w-5"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                      />
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+                      />
                     </svg>
                   </button>
-                  <button class="hover:text-yellow-600" title="Editar" (click)="goToDetail(report.code)">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
-                      stroke="currentColor">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M15.232 5.232l3.536 3.536M9 13h3l8-8a2.828 2.828 0 00-4-4l-8 8v3z" />
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M16 21H4a1 1 0 01-1-1v-4a1 1 0 011-1h12a1 1 0 011 1v4a1 1 0 01-1 1z" />
-                    </svg>
-                  </button>
-                  <button class="hover:text-red-600" title="Eliminar" (click)="onClickEliminar()">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
-                      stroke="currentColor">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                  <button
+                    class="hover:text-yellow-600"
+                    title="Editar"
+                    (click)="goToDetail(report.report_id)"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      class="h-5 w-5"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M15.232 5.232l3.536 3.536M9 13h3l8-8a2.828 2.828 0 00-4-4l-8 8v3z"
+                      />
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M16 21H4a1 1 0 01-1-1v-4a1 1 0 011-1h12a1 1 0 011 1v4a1 1 0 01-1 1z"
+                      />
                     </svg>
                   </button>
                 </div>
@@ -79,26 +117,33 @@
 
     <!-- Cards para mobile -->
     <div class="space-y-4 md:hidden">
-      <div *ngFor="let report of pagedReports" class="bg-white rounded-xl shadow p-4 flex flex-col gap-2">
+      <div
+        *ngFor="let report of pagedReports"
+        class="bg-white rounded-xl shadow p-4 flex flex-col gap-2"
+      >
         <div class="flex justify-between">
-          <span class="text-xs text-gray-400"># {{ report.code }}</span>
-          <span class="font-semibold text-gray-500">{{ report.user }}</span>
+          <span class="text-xs text-gray-400"># {{ report.case_number }}</span>
+          <span class="font-semibold text-gray-500">{{
+            report.user.full_name
+          }}</span>
         </div>
         <div>
           <span class="font-semibold">Tipo:</span>
           <span class="ml-2 bg-gray-100 px-2 py-1 rounded text-xs">{{
-            report.type
-            }}</span>
+            report.type.name
+          }}</span>
         </div>
         <div>
           <span class="font-semibold">Fecha:</span>
-          <span class="ml-2">{{ report.date }}</span>
+          <span class="ml-2">{{ report.created_at }}</span>
         </div>
         <div>
           <span class="font-semibold">Estado:</span>
-          <span class="ml-2 px-2 py-1 rounded-full border text-xs font-medium"
-            [ngClass]="getStatusClass(report.status)">
-            {{ report.status }}
+          <span
+            class="ml-2 px-2 py-1 rounded-full border text-xs font-medium"
+            [ngClass]="getStatusClass(report.stage[report.stage.length - 1].name)"
+          >
+            {{ report.stage[report.stage.length - 1].show_name }}
           </span>
         </div>
         <div class="flex gap-2 mt-2">
@@ -111,19 +156,29 @@
     <div class="flex items-center justify-center mt-8 gap-2">
       <button
         class="px-3 py-1 rounded border border-gray-200 shadow bg-white hover:bg-gray-100 transition disabled:opacity-40 disabled:cursor-not-allowed"
-        [disabled]="reportPage === 1" (click)="changeReportPage(reportPage - 1)">
+        [disabled]="reportPage === 1"
+        (click)="changeReportPage(reportPage - 1)"
+      >
         Anterior
       </button>
-      <ng-container *ngFor="let p of [].constructor(reportTotalPages); let i = index">
-        <button class="px-3 py-1 rounded border border-gray-200 shadow hover:bg-gray-100 transition" [ngClass]="{
+      <ng-container
+        *ngFor="let p of [].constructor(reportTotalPages); let i = index"
+      >
+        <button
+          class="px-3 py-1 rounded border border-gray-200 shadow hover:bg-gray-100 transition"
+          [ngClass]="{
             'bg-blue-600 text-white border-blue-600': reportPage === i + 1
-          }" (click)="changeReportPage(i + 1)">
+          }"
+          (click)="changeReportPage(i + 1)"
+        >
           {{ i + 1 }}
         </button>
       </ng-container>
       <button
         class="px-3 py-1 rounded border border-gray-200 shadow bg-white hover:bg-gray-100 transition disabled:opacity-40 disabled:cursor-not-allowed"
-        [disabled]="reportPage === reportTotalPages" (click)="changeReportPage(reportPage + 1)">
+        [disabled]="reportPage === reportTotalPages"
+        (click)="changeReportPage(reportPage + 1)"
+      >
         Siguiente
       </button>
     </div>
@@ -140,8 +195,21 @@
 ></app-confirm-modal>
 
 <!-- Modal de éxito -->
-<app-alert-modal [open]="showSuccess" type="success" title="¡Eliminado!"
-  message="El reporte fue eliminado exitosamente." (close)="cerrarSuccess()"></app-alert-modal>
+<app-alert-modal
+  [open]="showSuccess"
+  type="success"
+  title="¡Eliminado!"
+  message="El reporte fue eliminado exitosamente."
+  (close)="cerrarSuccess()"
+></app-alert-modal>
 
-  <!-- Loading spinner, lo pones al final para que cubra la pantalla -->
-<app-loading-spinner [show]="eliminarEnProgreso"></app-loading-spinner>
+<!-- Loading spinner, lo pones al final para que cubra la pantalla -->
+<app-loading-spinner [show]="loading"></app-loading-spinner>
+
+<!-- El modal -->
+<app-summary-modal
+  [open]="showSummary"
+  [type]="summaryType"
+  [data]="summaryData"
+  (close)="cerrarResumen()"
+></app-summary-modal>

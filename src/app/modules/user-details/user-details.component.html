@@ -1,0 +1,166 @@
+<!-- Spinner de carga -->
+<app-loading-spinner [show]="loading"></app-loading-spinner>
+<div class="bg-white rounded-2xl shadow-lg max-w-4xl mx-auto relative">
+  <button
+    class="absolute top-2 right-2 border rounded-lg px-4 py-1 text-gray-600 hover:bg-gray-50 flex items-center gap-2"
+    (click)="goToBack()"
+    type="button"
+  >
+    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="2"
+        d="M15 19l-7-7 7-7"
+      />
+    </svg>
+    Regresar
+  </button>
+  <!-- Formulario, solo visible si user está cargado -->
+  <form
+    *ngIf="user as u"
+    #formUser="ngForm"
+    class="flex-1 p-10 flex flex-col"
+    autocomplete="off"
+    novalidate
+  >
+    <div class="flex items-center justify-between mb-4">
+      <div>
+        <span class="font-semibold">Identificación:</span>
+        <span class="ml-2 text-gray-700">{{ u.identification }}</span>
+      </div>
+    </div>
+
+    <div class="mb-4">
+      <label class="block font-semibold mb-2" for="fullName"
+        >Nombre completo</label
+      >
+      <input
+        id="fullName"
+        [(ngModel)]="u.full_name"
+        name="full_name"
+        required
+        class="border rounded-lg p-2 w-full bg-gray-50"
+        type="text"
+        placeholder="Nombre completo"
+        #fullNameCtrl="ngModel"
+      />
+      <div
+        class="text-red-600 text-xs mt-1"
+        *ngIf="fullNameCtrl.invalid && fullNameCtrl.touched"
+      >
+        El nombre completo es obligatorio.
+      </div>
+    </div>
+    <div class="mb-4">
+      <label class="block font-semibold mb-2" for="username"
+        >Nombre de usuario</label
+      >
+      <input
+        id="username"
+        name="username"
+        [(ngModel)]="u.username"
+        required
+        class="border rounded-lg p-2 w-full bg-gray-50"
+        type="text"
+        placeholder="Nombre de usuario"
+        #usernameCtrl="ngModel"
+      />
+      <div
+        class="text-red-600 text-xs mt-1"
+        *ngIf="usernameCtrl.invalid && usernameCtrl.touched"
+      >
+        El nombre de usuario es obligatorio.
+      </div>
+    </div>
+    <div class="mb-4">
+      <label class="block font-semibold mb-2" for="email"
+        >Correo electrónico</label
+      >
+      <input
+        id="email"
+        name="email"
+        [(ngModel)]="u.email"
+        required
+        email
+        class="border rounded-lg p-2 w-full bg-gray-50"
+        type="email"
+        placeholder="Correo electrónico"
+        #emailCtrl="ngModel"
+      />
+      <div
+        class="text-red-600 text-xs mt-1"
+        *ngIf="emailCtrl.invalid && emailCtrl.touched"
+      >
+        <span *ngIf="emailCtrl.errors?.['required']"
+          >El correo es obligatorio.</span
+        >
+        <span *ngIf="emailCtrl.errors?.['email']">El correo no es válido.</span>
+      </div>
+    </div>
+    <!-- Combo para tipo de usuario -->
+    <div class="mb-4">
+      <label class="block font-semibold mb-2" for="type">Tipo de usuario</label>
+      <select
+        id="type"
+        name="type"
+        [(ngModel)]="u.type!.name"
+        required
+        class="border rounded-lg p-2 w-full bg-gray-50"
+        #typeCtrl="ngModel"
+      >
+        <option value="" disabled>Seleccione tipo</option>
+        <option value="Administrador">Administrador</option>
+        <option value="Vecino">Vecino</option>
+      </select>
+      <div
+        class="text-red-600 text-xs mt-1"
+        *ngIf="typeCtrl.invalid && typeCtrl.touched"
+      >
+        Debe seleccionar un tipo.
+      </div>
+    </div>
+    <div class="mb-4">
+        <label class="block font-semibold mb-2" for="status">Tipo de usuario</label>
+        <select
+          id="status"
+          name="status"
+          [(ngModel)]="u.status!.name"
+          required
+          class="border rounded-lg p-2 w-full bg-gray-50"
+          #typeCtrl="ngModel"
+        >
+          <option value="" disabled>Seleccione tipo</option>
+          <option value="good">Bueno</option>
+          <option value="bad">Malo</option>
+        </select>
+        <div
+          class="text-red-600 text-xs mt-1"
+          *ngIf="typeCtrl.invalid && typeCtrl.touched"
+        >
+          Debe seleccionar un tipo.
+        </div>
+      </div>
+    <!-- Botón guardar -->
+    <div class="mt-auto">
+      <button
+        [disabled]="formUser.invalid"
+        (click)="guardarCambios()"
+        class="bg-blue-600 text-white font-semibold px-6 py-2 rounded-lg hover:bg-blue-700 transition"
+        type="button"
+      >
+        Guardar cambios
+      </button>
+      <div *ngIf="formUser.invalid" class="text-red-600 text-xs mt-2">
+        Complete todos los campos obligatorios correctamente.
+      </div>
+    </div>
+  </form>
+</div>
+<app-alert-modal
+  [open]="showAlert"
+  [type]="alertType"
+  [title]="alertTitle"
+  [message]="alertMessage"
+  (close)="cerrarAlerta()"
+></app-alert-modal>

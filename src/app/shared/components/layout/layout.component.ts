@@ -7,13 +7,13 @@ import { SidebarComponent } from '../sidebar/sidebar.component';
   standalone: true,
   selector: 'app-layout',
   templateUrl: './layout.component.html',
-  imports: [RouterModule, NgIf, HeaderComponent, SidebarComponent]
+  imports: [RouterModule, NgIf, HeaderComponent, SidebarComponent],
 })
 export class LayoutComponent {
   isSidebarOpen = false;
 
-  toggleSidebar() {
-    this.isSidebarOpen = !this.isSidebarOpen;
+  toggleSidebar(open?: boolean) {
+    this.isSidebarOpen = open !== undefined ? open : !this.isSidebarOpen;
   }
 
   closeSidebar() {

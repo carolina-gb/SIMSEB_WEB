@@ -1,45 +1,50 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { AlertModalComponent } from '../alert-modal/alert-modal.component';
 import { ConfirmModalComponent } from '../confirm-modal/confirm-modal.component';
 import { LoadingSpinnerComponent } from '../loading-spinner/loading-spinner.component';
+import { SummaryModalComponent } from '../summary-modal/summary-modal.component';
+import { ApiService } from '../../services/services';
+import { ReportI } from '../../interfaces/report.interface';
 
 @Component({
   selector: 'app-report-list',
   standalone: true,
   templateUrl: './report-list.component.html',
   styleUrls: ['./report-list.component.css'],
-  imports: [CommonModule, AlertModalComponent, ConfirmModalComponent, LoadingSpinnerComponent],
+  imports: [
+    CommonModule,
+    AlertModalComponent,
+    ConfirmModalComponent,
+    LoadingSpinnerComponent,
+    SummaryModalComponent,
+  ],
 })
-export class ReportListComponent {
-  constructor(private router: Router) { }
-  reports = [
-    {
-      code: 'REP-001',
-      user: 'Gabrielym',
-      type: 'Alteración del orden público',
-      date: '2025-05-15',
-      status: 'Pendiente',
-    },
-    {
-      code: 'REP-002',
-      user: 'Angienb',
-      type: 'Problemas de salubridad',
-      date: '2025-05-15',
-      status: 'Rechazado',
-    },
-    {
-      code: 'REP-003',
-      user: 'Karenmg',
-      type: 'Problemas con vecinos',
-      date: '2025-05-15',
-      status: 'Resuelto',
-    },
-  ];
+export class ReportListComponent implements OnInit {
+  constructor(private router: Router, private apiService: ApiService) {}
+  reports: ReportI[] = [];
+  loading = false;
 
   reportPage = 1;
   reportPageSize = 5;
+  showSummary = false;
+  summaryType: 'reporte' | 'infraccion' | 'usuario' = 'reporte';
+  summaryData: any = {};
+
+  ngOnInit() {
+    this.loading = true;
+    this.apiService
+      .getReportList()
+      .then((data) => {
+        this.reports = data;
+        this.loading = false;
+      })
+      .catch(() => {
+        this.loading = false;
+        // Aquí podrías mostrar una alerta de error si quieres
+      });
+  }
 
   get pagedReports() {
     const start = (this.reportPage - 1) * this.reportPageSize;
@@ -55,24 +60,25 @@ export class ReportListComponent {
 
   getStatusClass(status: string) {
     switch (status) {
-      case 'Pendiente':
+      case 'opened':
         return 'bg-gray-100 text-gray-700';
-      case 'Rechazado':
+      case 'in_course':
+        return 'bg-gray-100 text-gray-700';
+      case 'rejected':
         return 'bg-gray-100 text-red-500';
-      case 'Resuelto':
+      case 'approved':
         return 'bg-gray-100 text-green-600';
       default:
         return 'bg-gray-100 text-gray-700';
     }
   }
 
-  goToDetail(reportId: string) {
+  goToDetail(reportId: number) {
     this.router.navigate(['/reports', reportId]);
   }
 
   showConfirm = false;
   showSuccess = false;
-
   eliminarEnProgreso = false;
 
   eliminarReporte() {
@@ -80,7 +86,6 @@ export class ReportListComponent {
     this.eliminarEnProgreso = true;
     setTimeout(() => {
       this.eliminarEnProgreso = false;
-
       this.showSuccess = true;
     }, 1500); // Simula 1.5s de eliminación
   }
@@ -92,5 +97,12 @@ export class ReportListComponent {
   cerrarSuccess() {
     this.showSuccess = false;
   }
-
+  abrirResumen(tipo: 'reporte' | 'infraccion' | 'usuario', data: any) {
+    this.summaryType = tipo;
+    this.summaryData = data;
+    this.showSummary = true;
+  }
+  cerrarResumen() {
+    this.showSummary = false;
+  }
 }

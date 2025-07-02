@@ -1,6 +1,6 @@
 <div class="bg-gray-100 pt-1">
   <div class="max-w-6xl mx-auto px-2 sm:px-4 lg:px-8">
-    <h2 class="text-xl font-bold mb-6 text-gray-700">Gestión de emergencias</h2>
+    <h2 class="text-xl font-bold mb-6 text-gray-700">Historial de emergencias</h2>
 
     <!-- Tabla desktop -->
     <div class="hidden md:block bg-white rounded-2xl shadow p-4 sm:p-6">
@@ -9,20 +9,13 @@
           <thead>
             <tr>
               <th class="px-4 py-2 text-left font-semibold border-b">
-                N° de emergencia
-              </th>
-              <th class="px-4 py-2 text-left font-semibold border-b">
                 Nombre de usuario
               </th>
               <th class="px-4 py-2 text-left font-semibold border-b">
-                Tipo de reporte
+                Tipo de emergencias
               </th>
               <th class="px-4 py-2 text-left font-semibold border-b">
                 Fecha de creación
-              </th>
-              <th class="px-4 py-2 text-left font-semibold border-b">Estado</th>
-              <th class="px-4 py-2 text-left font-semibold border-b">
-                Detalles
               </th>
             </tr>
           </thead>
@@ -31,22 +24,13 @@
               *ngFor="let emergency of pagedEmergencies"
               class="hover:bg-gray-50"
             >
-              <td class="px-4 py-3 border-b">{{ emergency.code }}</td>
-              <td class="px-4 py-3 border-b">{{ emergency.user }}</td>
+              <td class="px-4 py-3 border-b">{{ emergency.user.full_name }}</td>
               <td class="px-4 py-3 border-b">
                 <span class="block bg-gray-100 px-3 py-1 rounded">{{
-                  emergency.type
+                  emergency.type.name
                 }}</span>
               </td>
-              <td class="px-4 py-3 border-b">{{ emergency.date }}</td>
-              <td class="px-4 py-3 border-b">
-                <span
-                  [ngClass]="getStatusClass(emergency.status)"
-                  class="px-4 py-1 rounded-full border text-xs font-medium"
-                >
-                  {{ emergency.status }}
-                </span>
-              </td>
+              <td class="px-4 py-3 border-b">{{ emergency.created_at }}</td>
               <td class="px-4 py-3 border-b">
                 <div class="flex gap-2">
                   <!-- Iconos acciones -->
@@ -74,27 +58,17 @@
         class="bg-white rounded-xl shadow p-4 flex flex-col gap-2"
       >
         <div class="flex justify-between">
-          <span class="text-xs text-gray-400"># {{ emergency.code }}</span>
-          <span class="font-semibold text-gray-500">{{ emergency.user }}</span>
+          <span class="font-semibold text-gray-500">{{ emergency.user.full_name }}</span>
         </div>
         <div>
           <span class="font-semibold">Tipo:</span>
           <span class="ml-2 bg-gray-100 px-2 py-1 rounded text-xs">{{
-            emergency.type
+            emergency.type.name
           }}</span>
         </div>
         <div>
           <span class="font-semibold">Fecha:</span>
-          <span class="ml-2">{{ emergency.date }}</span>
-        </div>
-        <div>
-          <span class="font-semibold">Estado:</span>
-          <span
-            class="ml-2 px-2 py-1 rounded-full border text-xs font-medium"
-            [ngClass]="getStatusClass(emergency.status)"
-          >
-            {{ emergency.status }}
-          </span>
+          <span class="ml-2">{{ emergency.created_at }}</span>
         </div>
         <div class="flex gap-2 mt-2">
           <!-- Acciones -->
