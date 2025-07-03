@@ -50,13 +50,13 @@ export interface EmergencyTypeI {
 export interface UserTypeI {
   user_type_id: number;
   name: string;
-  show_name: string;
+  showName: string;
   created_at: Date;
 }
 
 export interface UserStatusI {
   user_status_id: number;
   name: string;
-  show_name: string;
+  showName: string;
   created_at: Date;
 }

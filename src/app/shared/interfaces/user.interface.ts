@@ -3,7 +3,7 @@ import { UserStatusI, UserTypeI } from "./auxiliar.interface";
 export interface UserI {
   user_id: number;
   username: string;
-  full_name: string;
+  fullName: string;
   identification: string;
   email: string;
   status: UserStatusI;

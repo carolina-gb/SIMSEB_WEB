@@ -1,13 +1,21 @@
 // src/app/shared/services/api.service.ts
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { environment } from '../../../enviroments/enviroment';
 import { UserI } from '../interfaces/user.interface';
 import { InfractionI } from '../interfaces/infraction.interface';
 import { EmergencyI } from '../interfaces/emergency.interface';
 import { ReportI } from '../interfaces/report.interface';
+import { LoginRequest } from '../interfaces/request.interface';
+import {
+  ApiResponse,
+  LoginResponseData,
+  UserListData,
+} from '../interfaces/response.interface';
 
 @Injectable({ providedIn: 'root' })
 export class ApiService {
+  private baseUrl = environment.apiUrl;
   constructor(private http: HttpClient) {}
   // ==== MOCK DATA ====
   private reports: ReportI[] = [
@@ -88,91 +96,33 @@ export class ApiService {
     // ...más emergencias
   ];
 
-  private users: UserI[] = [
-    {
-      user_id: 301,
-      username: 'eramirez',
-      identification: '0951553049',
-      full_name: 'Edinson Ramirez Rios',
-      email: 'eramirez@gmail.com',
-      status: {
-        user_status_id: 1,
-        name: 'good',
-        show_name: 'Bueno',
-        created_at: new Date('2025-06-30T10:22:00Z'),
-      },
-      type: {
-        user_type_id: 1,
-        name: 'Administrador',
-        show_name: 'Admin',
-        created_at: new Date('2025-01-01'),
-      },
-      created_at: new Date('2025-06-30T10:22:00Z'),
-      updated_at: new Date('2025-06-30T10:22:00Z'),
-      deleted_at: null,
-      details: '',
-    },
-    {
-      user_id: 302,
-      username: 'cgonzalez',
-      identification: '0951553048',
-      full_name: 'Carolina González Bernabé',
-      email: 'cgonzalez@gmail.com',
-      status: {
-        user_status_id: 1,
-        name: 'bad',
-        show_name: 'Malo',
-        created_at: new Date('2025-06-30T10:22:00Z'),
-      },
-      type: {
-        user_type_id: 2,
-        name: 'Vecino',
-        show_name: 'Vecino',
-        created_at: new Date('2025-01-01'),
-      },
-      created_at: new Date('2025-05-12T08:00:00Z'),
-      updated_at: new Date('2025-06-29T16:08:00Z'),
-      details: '',
-    },
-    {
-      user_id: 303,
-      username: 'mvillegas',
-      identification: '0951553047',
-      full_name: 'Manuel Villegas',
-      email: 'mvillegas@gmail.com',
-      status: {
-        user_status_id: 1,
-        name: 'in_observation',
-        show_name: 'En observacion',
-        created_at: new Date('2025-06-30T10:22:00Z'),
-      },
-      type: {
-        user_type_id: 2,
-        name: 'Vecino',
-        show_name: 'Vecino',
-        created_at: new Date('2025-01-01'),
-      },
-      created_at: new Date('2025-06-01T08:00:00Z'),
-      updated_at: null,
-      details: '',
-    },
-  ];
-
   // --- LOGIN ---
-  async login(username: string, password: string): Promise<any> {
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        if (username === 'admin' && password === '1234') {
-          resolve({
-            success: true,
-            token: 'FAKE_TOKEN',
-            user: { username: 'admin', name: 'Administrador' },
-          });
-        } else {
-          reject({ success: false, message: 'Credenciales incorrectas' });
+  login(credentials: LoginRequest): Promise<ApiResponse<LoginResponseData>> {
+    const url = `${this.baseUrl}/auth/login`;
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+
+    return this.http
+      .post<ApiResponse<LoginResponseData>>(url, credentials, { headers })
+      .toPromise()
+      .then((resp) => {
+        if (!resp) {
+          // Maneja el caso improbable, pero siempre retorna un ApiResponse válido
+          return {
+            code: 500,
+            message: 'No response from server',
+            data: { token: '' },
+          };
         }
-      }, 900);
-    });
+        return resp;
+      })
+      .catch((error) => {
+        // Convierte el error a un ApiResponse para mantener el tipo
+        return {
+          code: error?.status || 500,
+          message: error?.error?.message || 'Error de red',
+          data: { token: '' },
+        };
+      });
   }
 
   // ==== REPORTES ====
@@ -264,32 +214,30 @@ export class ApiService {
   }
 
   // --- USUARIOS ---
-  async getUserList(): Promise<any[]> {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        resolve(this.users);
-      }, 800);
-    });
-  }
-  async getUserById(id: number): Promise<any> {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        resolve(this.users.find((u) => u.user_id === id));
-      }, 600);
-    });
-  }
-
-  async updateUser(id: number, newData: any): Promise<any> {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        const idx = this.users.findIndex((u) => u.user_id === id);
-        if (idx >= 0) {
-          this.users[idx] = { ...this.users[idx], ...newData };
-          resolve({ success: true, user: { ...this.users[idx] } });
-        } else {
-          resolve({ success: false });
+   getUserList(skip = 0): Promise<ApiResponse<UserListData>> {
+    const url = `${this.baseUrl}/User/get/all`;
+    const params = new HttpParams().set('skip', skip.toString());
+    return this.http
+      .get<ApiResponse<UserListData>>(url, { params })
+      .toPromise()
+      .then((resp) => {
+        if (resp) {
+          return resp;
+          
         }
-      }, 1000);
-    });
+        return {
+          code: 500,
+          message: 'No response from server',
+          data: { count: 0, data: [] },
+        };
+      })
+      .catch((error) => {
+        // Si hay error, retorna también un ApiResponse
+        return {
+          code: error?.status || 500,
+          message: error?.error?.message || 'Error de red',
+          data: { count: 0, data: [] },
+        };
+      });
   }
 }

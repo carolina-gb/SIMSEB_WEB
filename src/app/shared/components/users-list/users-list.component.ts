@@ -1,7 +1,6 @@
 import { NgClass, NgFor } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { LoadingSpinnerComponent } from '../loading-spinner/loading-spinner.component';
-import { ConfirmModalComponent } from '../confirm-modal/confirm-modal.component';
 import { AlertModalComponent } from '../alert-modal/alert-modal.component';
 import { SummaryModalComponent } from '../summary-modal/summary-modal.component';
 import { Router } from '@angular/router';
@@ -15,7 +14,6 @@ import { UserI } from '../../interfaces/user.interface';
     NgFor,
     NgClass,
     LoadingSpinnerComponent,
-    ConfirmModalComponent,
     AlertModalComponent,
     SummaryModalComponent,
   ],
@@ -34,11 +32,32 @@ export class UsersListComponent implements OnInit {
   showConfirm = false;
   showSuccess = false;
   eliminarEnProgreso = false;
+  userTotalCount = 0;
 
   async ngOnInit() {
+    await this.getAllUsers();
+  }
+
+  async getAllUsers() {
+    const skip = (this.userPage - 1) * this.userPageSize;
     this.loading = true;
-    this.users = await this.services.getUserList();
-    this.loading = false;
+    try {
+      const resp = await this.services.getUserList(skip);
+      console.log(resp)
+      if (resp.code === 200) {
+        this.users = resp.data.data;
+        this.userTotalCount = resp.data.count;
+      } else {
+        this.users = [];
+        this.userTotalCount = 0;
+      }
+    } catch (err) {
+      this.users = [];
+      this.userTotalCount = 0;
+      // Opcional: mostrar alerta aquí
+    } finally {
+      this.loading = false;
+    }
   }
 
   goToDetail(userId: number) {
@@ -50,20 +69,12 @@ export class UsersListComponent implements OnInit {
     return this.users.slice(start, start + this.userPageSize);
   }
   get userTotalPages() {
-    return Math.ceil(this.users.length / this.userPageSize);
+    return Math.ceil(this.userTotalCount / this.userPageSize);
   }
-  changeUserPage(newPage: number) {
+  async changeUserPage(newPage: number) {
     if (newPage < 1 || newPage > this.userTotalPages) return;
     this.userPage = newPage;
-  }
-  eliminarReporte() {
-    this.showConfirm = false;
-    this.eliminarEnProgreso = true;
-    setTimeout(() => {
-      this.eliminarEnProgreso = false;
-
-      this.showSuccess = true;
-    }, 1500); // Simula 1.5s de eliminación
+    await this.getAllUsers();
   }
 
   onClickEliminar() {

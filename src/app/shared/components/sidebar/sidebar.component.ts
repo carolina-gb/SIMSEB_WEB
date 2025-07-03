@@ -26,6 +26,7 @@ export class SidebarComponent implements AfterViewInit {
     this.close.emit();
   }
   logout() {
+    localStorage.removeItem('token');
     this.router.navigate(['/login']);
   }
 }

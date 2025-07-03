@@ -36,9 +36,9 @@
         >Nombre completo</label
       >
       <input
-        id="fullName"
-        [(ngModel)]="u.full_name"
-        name="full_name"
+        id="name"
+        [(ngModel)]="u.fullName"
+        name="name"
         required
         class="border rounded-lg p-2 w-full bg-gray-50"
         type="text"
@@ -145,7 +145,6 @@
     <div class="mt-auto">
       <button
         [disabled]="formUser.invalid"
-        (click)="guardarCambios()"
         class="bg-blue-600 text-white font-semibold px-6 py-2 rounded-lg hover:bg-blue-700 transition"
         type="button"
       >

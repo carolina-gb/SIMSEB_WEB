@@ -19,7 +19,7 @@ export class LoginComponent {
   error = '';
   loginError = false;
 
-  constructor(private api: ApiService, private router: Router) { }
+  constructor(private api: ApiService, private router: Router) {}
 
   get canLogin() {
     return this.username?.trim() && this.password?.trim();
@@ -28,12 +28,17 @@ export class LoginComponent {
     this.error = '';
     this.loading = true;
     try {
-      const resp = await this.api.login(this.username, this.password);
-      // Aquí podrías guardar el token si usas auth real
-      // localStorage.setItem('token', resp.token);
-
-      // Redirige al dashboard
-      await this.router.navigate(['/dashboard']);
+      const resp = await this.api.login({
+        input: this.username,
+        password: this.password,
+      });
+      if (resp.code == 200) {
+        localStorage.setItem('token', resp.data.token);
+        await this.router.navigate(['/dashboard']);
+      } else {
+        this.loginError = true;
+        this.error = resp.message;
+      }
     } catch (err: any) {
       this.loginError = true;
       this.error = err.message || 'Error de login';

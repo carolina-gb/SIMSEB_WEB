@@ -32,8 +32,7 @@ export class UserDetailsComponent implements OnInit {
   async ngOnInit() {
     this.loading = true;
     const userId = Number(this.route.snapshot.paramMap.get('userId'));
-    this.user = await this.services.getUserById(userId);
-    this.loading = false;
+    // this.user = await this.services.getUserById(userId);}
     if (!this.user) {
       this.mostrarAlerta(
         'error',
@@ -42,37 +41,38 @@ export class UserDetailsComponent implements OnInit {
       );
       setTimeout(() => this.goToBack(), 2000);
     }
+    this.loading = false;
   }
 
-  async guardarCambios() {
-    if (
-      !this.user?.full_name ||
-      !this.user.username ||
-      !this.user.email ||
-      !this.user.type?.name ||
-      !this.user.status.name ||
-      !this.isEmailValid(this.user.email)
-    ) {
-      this.mostrarAlerta(
-        'error',
-        'Datos incompletos',
-        'Completa todos los campos obligatorios con datos válidos.'
-      );
-      return;
-    }
-    this.loading = true;
-    const result = await this.services.updateUser(this.user.user_id, this.user);
-    this.loading = false;
-    if (result.success) {
-      this.mostrarAlerta(
-        'success',
-        'Usuario actualizado',
-        'Los cambios fueron guardados correctamente.'
-      );
-    } else {
-      this.mostrarAlerta('error', 'Error', 'No se pudo actualizar el usuario.');
-    }
-  }
+  // async guardarCambios() {
+  //   if (
+  //     !this.user?.full_name ||
+  //     !this.user.username ||
+  //     !this.user.email ||
+  //     !this.user.type?.name ||
+  //     !this.user.status.name ||
+  //     !this.isEmailValid(this.user.email)
+  //   ) {
+  //     this.mostrarAlerta(
+  //       'error',
+  //       'Datos incompletos',
+  //       'Completa todos los campos obligatorios con datos válidos.'
+  //     );
+  //     return;
+  //   }
+  //   this.loading = true;
+  //   const result = await this.services.updateUser(this.user.user_id, this.user);
+  //   this.loading = false;
+  //   if (result.success) {
+  //     this.mostrarAlerta(
+  //       'success',
+  //       'Usuario actualizado',
+  //       'Los cambios fueron guardados correctamente.'
+  //     );
+  //   } else {
+  //     this.mostrarAlerta('error', 'Error', 'No se pudo actualizar el usuario.');
+  //   }
+  // }
 
   isEmailValid(email: string) {
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
