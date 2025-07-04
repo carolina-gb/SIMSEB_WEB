@@ -2,16 +2,20 @@
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '../../../enviroments/enviroment';
-import { UserI } from '../interfaces/user.interface';
 import { InfractionI } from '../interfaces/infraction.interface';
 import { EmergencyI } from '../interfaces/emergency.interface';
 import { ReportI } from '../interfaces/report.interface';
-import { LoginRequest } from '../interfaces/request.interface';
+import {
+  LoginRequest,
+  UserResetRequest,
+  UserUpdateRequest,
+} from '../interfaces/request.interface';
 import {
   ApiResponse,
   LoginResponseData,
   UserListData,
 } from '../interfaces/response.interface';
+import { firstValueFrom } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class ApiService {
@@ -95,7 +99,11 @@ export class ApiService {
     },
     // ...más emergencias
   ];
-
+  isAuthenticated(): boolean {
+    // Aquí tu lógica real, por ejemplo, chequear si hay token en localStorage:
+    return !!localStorage.getItem('token');
+    // O según como manejes la autenticación en tu app
+  }
   // --- LOGIN ---
   login(credentials: LoginRequest): Promise<ApiResponse<LoginResponseData>> {
     const url = `${this.baseUrl}/auth/login`;
@@ -214,30 +222,152 @@ export class ApiService {
   }
 
   // --- USUARIOS ---
-   getUserList(skip = 0): Promise<ApiResponse<UserListData>> {
+  async createUser(userData: {
+    username: string;
+    name: string;
+    lastName: string;
+    identification: string;
+    email: string;
+    typeId: number;
+  }): Promise<
+    ApiResponse<{
+      userId: string;
+      username: string;
+      email: string;
+      password: string;
+    }>
+  > {
+    const url = `${this.baseUrl}/User/create`;
+    try {
+      const resp = await firstValueFrom(
+        this.http.post<
+          ApiResponse<{
+            userId: string;
+            username: string;
+            email: string;
+            password: string;
+          }>
+        >(url, userData)
+      );
+      if (resp) return resp;
+      return {
+        code: 500,
+        message: 'No response from server',
+        data: {
+          userId: '',
+          username: '',
+          email: '',
+          password: '',
+        },
+      };
+    } catch (error: any) {
+      return {
+        code: error?.status || 500,
+        message: error?.error?.message || 'Error de red',
+        data: {
+          userId: '',
+          username: '',
+          email: '',
+          password: '',
+        },
+      };
+    }
+  }
+
+  async getUserList(skip = 0): Promise<ApiResponse<UserListData>> {
     const url = `${this.baseUrl}/User/get/all`;
     const params = new HttpParams().set('skip', skip.toString());
-    return this.http
-      .get<ApiResponse<UserListData>>(url, { params })
-      .toPromise()
-      .then((resp) => {
-        if (resp) {
-          return resp;
-          
-        }
+    try {
+      const resp = await firstValueFrom(
+        this.http.get<ApiResponse<UserListData>>(url, { params })
+      );
+      if (resp) return resp;
+      return {
+        code: 500,
+        message: 'No response from server',
+        data: { count: 0, data: [] },
+      };
+    } catch (error: any) {
+      return {
+        code: error?.status || 500,
+        message: error?.error?.message || 'Error de red',
+        data: { count: 0, data: [] },
+      };
+    }
+  }
+
+  async getUserById(userId: string): Promise<ApiResponse<UserListData>> {
+    const url = `${this.baseUrl}/User/get/by-id`;
+    const params = new HttpParams().set('userId', userId);
+    try {
+      const resp = await firstValueFrom(
+        this.http.get<ApiResponse<UserListData>>(url, { params })
+      );
+      if (resp) return resp;
+      return {
+        code: 500,
+        message: 'No response from server',
+        data: { count: 0, data: [] },
+      };
+    } catch (error: any) {
+      return {
+        code: error?.status || 500,
+        message: error?.error?.message || 'Error de red',
+        data: { count: 0, data: [] },
+      };
+    }
+  }
+
+  async updateUserById(userData: UserUpdateRequest): Promise<ApiResponse<any>> {
+    const url = `${this.baseUrl}/User/update`;
+    try {
+      const resp = await firstValueFrom(
+        this.http.put<ApiResponse<any>>(url, userData)
+      );
+      if (resp.code == 200 || resp.code == 201) {
+        return resp;
+      } else {
         return {
           code: 500,
           message: 'No response from server',
           data: { count: 0, data: [] },
         };
-      })
-      .catch((error) => {
-        // Si hay error, retorna también un ApiResponse
-        return {
-          code: error?.status || 500,
-          message: error?.error?.message || 'Error de red',
-          data: { count: 0, data: [] },
-        };
-      });
+      }
+    } catch (error: any) {
+      return {
+        code: error?.status || 500,
+        message: error?.error?.message || 'Error de red',
+        data: { count: 0, data: [] },
+      };
+    }
+  }
+
+  async resetUserPasswrd(paramsObj: {
+    [key: string]: string;
+  }): Promise<ApiResponse<any>> {
+    const url = `${this.baseUrl}/UserManagement/clear-password`;
+    let params = new HttpParams();
+    for (const key in paramsObj) {
+      if (paramsObj[key]) {
+        params = params.set(key, paramsObj[key]);
+      }
+    }
+    try {
+      const resp = await firstValueFrom(
+        this.http.put<ApiResponse<any>>(url, null, { params: params })
+      );
+      if (resp) return resp;
+      return {
+        code: 500,
+        message: 'No response from server',
+        data: { count: 0, data: [] },
+      };
+    } catch (error: any) {
+      return {
+        code: error?.status || 500,
+        message: error?.error?.message || 'Error de red',
+        data: { count: 0, data: [] },
+      };
+    }
   }
 }

@@ -3,7 +3,7 @@ import { UserI } from './user.interface';
 export interface ApiResponse<T = any> {
   code: number;
   message: string;
-  data: T;
+  data?: T | null;
 }
 
 export interface LoginResponseData {

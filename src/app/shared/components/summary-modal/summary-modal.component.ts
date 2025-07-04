@@ -47,7 +47,6 @@ export class SummaryModalComponent {
           { label: 'Tipo', value: this.data.type_name },
           { label: 'Estado', value: this.data.status },
           { label: 'Creado el', value: this.data.created_at },
-          { label: 'Último acceso', value: this.data.last_login },
         ];
       default:
         return [];

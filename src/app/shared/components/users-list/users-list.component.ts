@@ -1,4 +1,4 @@
-import { NgClass, NgFor } from '@angular/common';
+import { NgClass, NgFor, NgIf } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { LoadingSpinnerComponent } from '../loading-spinner/loading-spinner.component';
 import { AlertModalComponent } from '../alert-modal/alert-modal.component';
@@ -6,16 +6,22 @@ import { SummaryModalComponent } from '../summary-modal/summary-modal.component'
 import { Router } from '@angular/router';
 import { ApiService } from '../../services/services';
 import { UserI } from '../../interfaces/user.interface';
+import { UserCreateModalComponent } from '../user-create-modal/user-create-modal.component';
+import { UserCreateI } from '../../interfaces/request.interface';
+import { ConfirmModalComponent } from '../confirm-modal/confirm-modal.component';
 
 @Component({
   selector: 'app-users-list',
   standalone: true,
   imports: [
     NgFor,
+    NgIf,
     NgClass,
     LoadingSpinnerComponent,
     AlertModalComponent,
     SummaryModalComponent,
+    UserCreateModalComponent,
+    ConfirmModalComponent,
   ],
   templateUrl: './users-list.component.html',
   styleUrl: './users-list.component.css',
@@ -33,6 +39,11 @@ export class UsersListComponent implements OnInit {
   showSuccess = false;
   eliminarEnProgreso = false;
   userTotalCount = 0;
+  showAlert = false;
+  alertType: 'success' | 'error' | 'info' | 'warning' = 'info';
+  alertTitle = '';
+  alertMessage = '';
+  userToReset = '';
 
   async ngOnInit() {
     await this.getAllUsers();
@@ -43,10 +54,10 @@ export class UsersListComponent implements OnInit {
     this.loading = true;
     try {
       const resp = await this.services.getUserList(skip);
-      console.log(resp)
+      console.log(resp);
       if (resp.code === 200) {
-        this.users = resp.data.data;
-        this.userTotalCount = resp.data.count;
+        this.users = resp.data!.data;
+        this.userTotalCount = resp.data!.count;
       } else {
         this.users = [];
         this.userTotalCount = 0;
@@ -60,7 +71,7 @@ export class UsersListComponent implements OnInit {
     }
   }
 
-  goToDetail(userId: number) {
+  async goToDetail(userId: string) {
     this.router.navigate(['/users', userId]);
   }
 
@@ -104,5 +115,62 @@ export class UsersListComponent implements OnInit {
   }
   cerrarResumen() {
     this.showSummary = false;
+  }
+  showUserCreate = false;
+
+  async crearUsuario(user: UserCreateI) {
+    const resp = await this.services.createUser(user);
+
+    if (resp.code === 201) {
+      // Si quieres recargar usuarios:
+      await this.getAllUsers();
+      // Muestra la alerta
+      this.mostrarAlerta('success', 'Usuario creado con éxito', resp.message);
+      this.showSuccess = true;
+    } else {
+      this.mostrarAlerta(
+        'error',
+        'Error al actualizar',
+        resp.message || 'No se pudo actualizar el usuario.'
+      );
+    }
+  }
+  mostrarAlertadialog(username: string) {
+    this.showConfirm = true;
+    this.userToReset = username;
+  }
+  async resetearContrasena() {
+    console.log(this.userToReset);
+    const resp = await this.services.resetUserPasswrd({
+      targetUsername: this.userToReset,
+      adminUsername: 'admin',
+    });
+    this.showConfirm = false;
+    if (resp.code === 200) {
+      // Muestra la alerta
+      const message = `${resp.message}, 
+      su nueva contraseña es: ${resp.data}`;
+      this.mostrarAlerta('success', 'Usuario actualizado', message);
+      this.showSuccess = true;
+    } else {
+      this.mostrarAlerta(
+        'error',
+        'Error al actualizar',
+        resp.message || 'No se pudo actualizar el usuario.'
+      );
+    }
+  }
+  mostrarAlerta(
+    tipo: 'success' | 'error' | 'info' | 'warning',
+    titulo: string,
+    mensaje: string
+  ) {
+    this.alertType = tipo;
+    this.alertTitle = titulo;
+    this.alertMessage = mensaje;
+    this.showAlert = true;
+  }
+  cerrarAlerta() {
+    this.showAlert = false;
   }
 }

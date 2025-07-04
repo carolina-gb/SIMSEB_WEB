@@ -5,18 +5,21 @@
 ></div>
 
 <!-- Sidebar (overlay en todas las pantallas) -->
+
 <app-sidebar
   *ngIf="isSidebarOpen"
-  class="fixed top-0 left-0 z-40 animate-fade-in transition-transform duration-400"
+  class="fixed min-h-screen top-0 left-0 z-40 animate-fade-in transition-transform duration-400"
   [open]="isSidebarOpen"
-  (close)="isSidebarOpen = false">
-></app-sidebar>
+  (close)="isSidebarOpen = false"
+>
+  ></app-sidebar
+>
 
 <!-- Contenido principal -->
-<div class="min-h-screen bg-gray-100">
+<div>
   <app-header (toggleMenu)="toggleSidebar()"></app-header>
 
   <div class="max-w-7xl mx-auto pt-20 pb-10 px-8">
-      <router-outlet></router-outlet>
+    <router-outlet></router-outlet>
   </div>
 </div>

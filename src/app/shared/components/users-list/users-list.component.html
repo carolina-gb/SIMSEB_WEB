@@ -1,201 +1,384 @@
-<div class="bg-gray-100 pt-1">
+<div class="pt-1">
   <div class="max-w-6xl mx-auto px-2 sm:px-4 lg:px-8">
     <h2 class="text-xl font-bold mb-6 text-gray-700">Gestión de usuarios</h2>
 
-    <!-- Tabla desktop -->
-    <div class="hidden md:block bg-white rounded-2xl shadow p-4 sm:p-6">
-      <div class="overflow-x-auto min-w-[700px] min-h-[340px]">
-        <table class="w-full border-separate border-spacing-0 text-sm">
-          <thead>
-            <tr>
-              <th class="px-4 py-2 text-left font-semibold border-b">
-                N° de identificación
-              </th>
-              <th class="px-4 py-2 text-left font-semibold border-b">
-                Nombres completos
-              </th>
-              <th class="px-4 py-2 text-left font-semibold border-b">
-                Correo electrónico
-              </th>
-              <th class="px-4 py-2 text-left font-semibold border-b">Estado</th>
-              <th class="px-4 py-2 text-left font-semibold border-b">
-                Detalles
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let user of pagedUsers" class="hover:bg-gray-50">
-              <td class="px-4 py-3 border-b">{{ user.identification }}</td>
-              <td class="px-4 py-3 border-b">
-                <span class="block bg-gray-100 px-3 py-1 rounded">{{
-                  user.fullName
-                }}</span>
-              </td>
-              <td class="px-4 py-3 border-b">{{ user.email }}</td>
-              <td class="px-4 py-3 border-b">
-                <span
-                  [ngClass]="getStatusClass(user.status.showName)"
-                  class="px-4 py-1 rounded-full border text-xs font-medium"
+    <div class="overflow-x-auto min-w-[700px] min-h-[340px]">
+      <div class="pt-1">
+        <!-- Tabla desktop -->
+        <div class="max-w-6xl mx-auto px-2 sm:px-4 lg:px-8">
+          <div class="hidden md:block bg-white rounded-2xl shadow p-4 sm:p-6">
+            <div class="flex justify-between items-center mb-4">
+              <button
+                class="flex items-center gap-2 bg-blue-600 text-white font-semibold px-4 py-2 rounded-lg shadow hover:bg-blue-700 transition active:scale-95"
+                (click)="showUserCreate = true"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="h-5 w-5"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
                 >
-                  {{ user.status.showName }}
-                </span>
-              </td>
-              <td class="px-4 py-3 border-b">
-                <div class="flex gap-2">
-                  <!-- Iconos acción -->
-                  <button
-                    class="hover:text-blue-600"
-                    title="Ver"
-                    (click)="
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M12 4v16m8-8H4"
+                  />
+                </svg>
+                Crear usuario
+              </button>
+            </div>
+            <table class="w-full border-separate border-spacing-0 text-sm">
+              <thead>
+                <tr>
+                  <th class="px-4 py-2 text-left font-semibold border-b">
+                    N° de identificación
+                  </th>
+                  <th class="px-4 py-2 text-left font-semibold border-b">
+                    Nombres completos
+                  </th>
+                  <th class="px-4 py-2 text-left font-semibold border-b">
+                    Correo electrónico
+                  </th>
+                  <th class="px-4 py-2 text-left font-semibold border-b">
+                    Estado
+                  </th>
+                  <th class="px-4 py-2 text-left font-semibold border-b">
+                    Detalles
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let user of users" class="hover:bg-gray-50">
+                  <td class="px-4 py-3 border-b">{{ user.identification }}</td>
+                  <td class="px-4 py-3 border-b">
+                    <span class="block px-3 py-1 rounded">{{
+                      user.fullName
+                    }}</span>
+                  </td>
+                  <td class="px-4 py-3 border-b">{{ user.email }}</td>
+                  <td class="px-4 py-3 border-b">
+                    <span
+                      [ngClass]="getStatusClass(user.userStatus.showName)"
+                      class="px-4 py-1 rounded-full border text-xs font-medium"
+                    >
+                      {{ user.userStatus.showName }}
+                    </span>
+                  </td>
+                  <td class="px-4 py-3 border-b">
+                    <div class="flex gap-2">
+                      <!-- Iconos acción -->
+                      <button
+                        class="hover:text-blue-600"
+                        title="Ver"
+                        (click)="
                       abrirResumen('usuario', {
                         username: user.username,
                         full_name: user.fullName,
                         email: user.email,
-                        type_name: user.type?.showName,
-                        status: user.status.showName,
+                        type_name: user.type!.showName,
+                        status: user.userStatus.showName,
                         identification: user.identification,
-                        created_at: user.created_at,
+                        created_at: user.createdAt,
                       })
                     "
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      class="h-5 w-5"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-                      />
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
-                      />
-                    </svg>
-                  </button>
-                  <button
-                    class="hover:text-yellow-600"
-                    title="Editar"
-                    (click)="goToDetail(user.user_id)"
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      class="h-5 w-5"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M15.232 5.232l3.536 3.536M9 13h3l8-8a2.828 2.828 0 00-4-4l-8 8v3z"
-                      />
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M16 21H4a1 1 0 01-1-1v-4a1 1 0 011-1h12a1 1 0 011 1v4a1 1 0 01-1 1z"
-                      />
-                    </svg>
-                  </button>
-                </div>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-
-    <!-- Cards para mobile -->
-    <div class="space-y-4 md:hidden">
-      <div
-        *ngFor="let user of pagedUsers"
-        class="bg-white rounded-xl shadow p-4 flex flex-col gap-2"
-      >
-        <div class="flex justify-between">
-          <span class="text-xs text-gray-400"># {{ user.identification }}</span>
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          class="h-5 w-5"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                        >
+                          <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                          />
+                          <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+                          />
+                        </svg>
+                      </button>
+                      <button
+                        class="hover:text-yellow-600"
+                        title="Editar"
+                        (click)="goToDetail(user.userId)"
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          class="h-5 w-5"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                        >
+                          <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M15.232 5.232l3.536 3.536M9 13h3l8-8a2.828 2.828 0 00-4-4l-8 8v3z"
+                          />
+                          <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M16 21H4a1 1 0 01-1-1v-4a1 1 0 011-1h12a1 1 0 011 1v4a1 1 0 01-1 1z"
+                          />
+                        </svg></button
+                      ><!-- Icono Resetear Contraseña -->
+                      <button
+                        class="hover:text-purple-600"
+                        title="Resetear contraseña"
+                        (click)="mostrarAlertadialog(user.username)"
+                      >
+                        <!-- Puedes usar tu propio SVG, este es un ejemplo de candado abierto -->
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          class="h-5 w-5"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                        >
+                          <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M12 17a2 2 0 100-4 2 2 0 000 4zm6 0V9a6 6 0 10-12 0v8a2 2 0 002 2h8a2 2 0 002-2zm-6-7v3"
+                          />
+                        </svg>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
-        <div>
-          <span class="font-semibold">Nombres:</span>
-          <span class="ml-2 bg-gray-100 px-2 py-1 rounded text-xs">{{
-            user.fullName
-          }}</span>
-        </div>
-        <div>
-          <span class="font-semibold">Correo:</span>
-          <span class="ml-2">{{ user.email }}</span>
-        </div>
-        <div>
-          <span class="font-semibold">Estado:</span>
-          <span
-            class="ml-2 px-2 py-1 rounded-full border text-xs font-medium"
-            [ngClass]="getStatusClass(user.status.name)"
+        <!-- Cards para mobile -->
+        <div class="space-y-4 p-10 md:hidden">
+          <!-- Botón sólo visible en móvil -->
+          <div class="4 md:hidden">
+            <button
+              class="flex max-w-6xl items-center justify-center gap-2 bg-blue-600 text-white font-semibold px-4 py-2 rounded-lg shadow hover:bg-blue-700 transition"
+              (click)="showUserCreate = true"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-5 w-5"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M12 4v16m8-8H4"
+                />
+              </svg>
+              Crear usuario
+            </button>
+          </div>
+          <div
+            *ngFor="let user of users"
+            class="bg-white rounded-2xl shadow p-4 flex flex-col gap-2 border border-gray-200"
           >
-            {{ user.status.showName }}
-          </span>
+            <!-- Header Identificación y Estado -->
+            <div class="flex items-center justify-between">
+              <span class="font-bold text-blue-600 text-base"
+                >#{{ user.identification }}</span
+              >
+              <span
+                class="px-3 py-1 text-xs rounded-full border font-semibold"
+                [ngClass]="getStatusClass(user.userStatus.name)"
+              >
+                {{ user.userStatus.showName }}
+              </span>
+            </div>
+            <!-- Contenido principal -->
+            <div class="flex flex-col gap-1 mb-2 mt-1">
+              <div>
+                <span class="font-semibold text-gray-700">Nombres:</span>
+                <span
+                  class="ml-1 text-gray-800 bg-gray-100 px-2 py-1 rounded text-sm"
+                  >{{ user.fullName }}</span
+                >
+              </div>
+              <div>
+                <span class="font-semibold text-gray-700">Correo:</span>
+                <span class="ml-1 text-gray-600 text-sm break-all">{{
+                  user.email
+                }}</span>
+              </div>
+              <div *ngIf="user.type!.showName">
+                <span class="font-semibold text-gray-700">Tipo:</span>
+                <span
+                  class="ml-1 text-blue-600 bg-blue-50 px-2 py-0.5 rounded text-xs"
+                  >{{ user.type!.showName }}</span
+                >
+              </div>
+            </div>
+            <!-- Botones de acción -->
+            <div class="flex gap-4 pt-2 border-t border-gray-100 mt-2">
+              <!-- Ver -->
+              <button
+                class="hover:text-blue-600 transition"
+                title="Ver"
+                (click)="abrirResumen('usuario', {
+          username: user.username,
+          full_name: user.fullName,
+          email: user.email,
+          type_name: user.type?.showName,
+          status: user.userStatus!.showName,
+          identification: user.identification,
+          created_at: user.createdAt,
+        })"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="h-5 w-5"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                  />
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+                  />
+                </svg>
+              </button>
+              <!-- Editar -->
+              <button
+                class="hover:text-yellow-600 transition"
+                title="Editar"
+                (click)="goToDetail(user.userId)"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="h-5 w-5"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M15.232 5.232l3.536 3.536M9 13h3l8-8a2.828 2.828 0 00-4-4l-8 8v3z"
+                  />
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M16 21H4a1 1 0 01-1-1v-4a1 1 0 011-1h12a1 1 0 011 1v4a1 1 0 01-1 1z"
+                  />
+                </svg>
+              </button>
+              <!-- Resetear contraseña -->
+              <button
+                class="hover:text-purple-600 transition"
+                title="Resetear contraseña"
+                (click)="mostrarAlertadialog(user.username)"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="h-5 w-5"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M12 17a2 2 0 100-4 2 2 0 000 4zm6 0V9a6 6 0 10-12 0v8a2 2 0 002 2h8a2 2 0 002-2zm-6-7v3"
+                  />
+                </svg>
+              </button>
+            </div>
+          </div>
         </div>
-        <div class="flex gap-2 mt-2">
-          <!-- Iconos acción -->
+
+        <!-- Paginador -->
+        <div class="flex items-center justify-center mt-8 gap-2">
+          <button
+            class="px-3 py-1 rounded border border-gray-200 shadow bg-white hover:bg-gray-100 transition disabled:opacity-40 disabled:cursor-not-allowed"
+            [disabled]="userPage === 1"
+            (click)="changeUserPage(userPage - 1)"
+          >
+            Anterior
+          </button>
+          <ng-container
+            *ngFor="let p of [].constructor(userTotalPages); let i = index"
+          >
+            <button
+              class="px-3 py-1 rounded border border-gray-200 shadow hover:bg-gray-100 transition"
+              [ngClass]="{
+                'bg-blue-600 text-white border-blue-600': userPage === i + 1
+              }"
+              (click)="changeUserPage(i + 1)"
+            >
+              {{ i + 1 }}
+            </button>
+          </ng-container>
+          <button
+            class="px-3 py-1 rounded border border-gray-200 shadow bg-white hover:bg-gray-100 transition disabled:opacity-40 disabled:cursor-not-allowed"
+            [disabled]="userPage === userTotalPages"
+            (click)="changeUserPage(userPage + 1)"
+          >
+            Siguiente
+          </button>
         </div>
       </div>
     </div>
 
-    <!-- Paginador -->
-    <div class="flex items-center justify-center mt-8 gap-2">
-      <button
-        class="px-3 py-1 rounded border border-gray-200 shadow bg-white hover:bg-gray-100 transition disabled:opacity-40 disabled:cursor-not-allowed"
-        [disabled]="userPage === 1"
-        (click)="changeUserPage(userPage - 1)"
-      >
-        Anterior
-      </button>
-      <ng-container
-        *ngFor="let p of [].constructor(userTotalPages); let i = index"
-      >
-        <button
-          class="px-3 py-1 rounded border border-gray-200 shadow hover:bg-gray-100 transition"
-          [ngClass]="{
-            'bg-blue-600 text-white border-blue-600': userPage === i + 1
-          }"
-          (click)="changeUserPage(i + 1)"
-        >
-          {{ i + 1 }}
-        </button>
-      </ng-container>
-      <button
-        class="px-3 py-1 rounded border border-gray-200 shadow bg-white hover:bg-gray-100 transition disabled:opacity-40 disabled:cursor-not-allowed"
-        [disabled]="userPage === userTotalPages"
-        (click)="changeUserPage(userPage + 1)"
-      >
-        Siguiente
-      </button>
-    </div>
+    <!-- Modal de éxito -->
+    <app-alert-modal
+      [open]="showSuccess"
+      type="success"
+      [title]="alertTitle"
+      [message]="alertMessage"
+      (close)="cerrarSuccess()"
+    ></app-alert-modal>
+
+    <app-confirm-modal
+      [open]="showConfirm"
+      [loading]="loading"
+      title="¿Estás seguro que deseas generar una contraseña nueva a este usuario?"
+      message="Esta acción no se puede deshacer."
+      (confirm)="resetearContrasena()"
+      (cancel)="showConfirm = false"
+    ></app-confirm-modal>
+
+    <!-- Loading spinner, lo pones al final para que cubra la pantalla -->
+    <app-loading-spinner [show]="loading"></app-loading-spinner>
+
+    <!-- El modal -->
+    <app-summary-modal
+      [open]="showSummary"
+      [type]="summaryType"
+      [data]="summaryData"
+      (close)="cerrarResumen()"
+    ></app-summary-modal>
+
+    <app-user-create-modal
+      *ngIf="showUserCreate"
+      (close)="showUserCreate = false"
+      (create)="crearUsuario($event)"
+    >
+    </app-user-create-modal>
   </div>
 </div>
-
-<!-- Modal de éxito -->
-<app-alert-modal
-  [open]="showSuccess"
-  type="success"
-  title="¡Eliminado!"
-  message="El reporte fue eliminado exitosamente."
-  (close)="cerrarSuccess()"
-></app-alert-modal>
-
-<!-- Loading spinner, lo pones al final para que cubra la pantalla -->
-<app-loading-spinner [show]="loading"></app-loading-spinner>
-
-<!-- El modal -->
-<app-summary-modal
-  [open]="showSummary"
-  [type]="summaryType"
-  [data]="summaryData"
-  (close)="cerrarResumen()"
-></app-summary-modal>

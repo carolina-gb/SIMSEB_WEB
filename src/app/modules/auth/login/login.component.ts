@@ -33,7 +33,7 @@ export class LoginComponent {
         password: this.password,
       });
       if (resp.code == 200) {
-        localStorage.setItem('token', resp.data.token);
+        localStorage.setItem('token', resp.data!.token);
         await this.router.navigate(['/dashboard']);
       } else {
         this.loginError = true;

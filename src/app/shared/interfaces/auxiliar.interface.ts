@@ -48,15 +48,15 @@ export interface EmergencyTypeI {
 }
 
 export interface UserTypeI {
-  user_type_id: number;
+  userTypeId: number;
   name: string;
   showName: string;
-  created_at: Date;
+  createdAt: Date;
 }
 
 export interface UserStatusI {
-  user_status_id: number;
+  userStatusId: number;
   name: string;
   showName: string;
-  created_at: Date;
+  createdAt: Date;
 }

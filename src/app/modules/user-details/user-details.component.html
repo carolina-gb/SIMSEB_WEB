@@ -1,6 +1,4 @@
-<!-- Spinner de carga -->
-<app-loading-spinner [show]="loading"></app-loading-spinner>
-<div class="bg-white rounded-2xl shadow-lg max-w-4xl mx-auto relative">
+<div class="bg-white rounded-2xl shadow-lg max-w-6xl mx-auto relative">
   <button
     class="absolute top-2 right-2 border rounded-lg px-4 py-1 text-gray-600 hover:bg-gray-50 flex items-center gap-2"
     (click)="goToBack()"
@@ -20,7 +18,7 @@
   <form
     *ngIf="user as u"
     #formUser="ngForm"
-    class="flex-1 p-10 flex flex-col"
+    class="flex-1 p-20 flex flex-col"
     autocomplete="off"
     novalidate
   >
@@ -36,9 +34,9 @@
         >Nombre completo</label
       >
       <input
-        id="name"
+        id="fullName"
         [(ngModel)]="u.fullName"
-        name="name"
+        name="fullName"
         required
         class="border rounded-lg p-2 w-full bg-gray-50"
         type="text"
@@ -110,8 +108,9 @@
         #typeCtrl="ngModel"
       >
         <option value="" disabled>Seleccione tipo</option>
-        <option value="Administrador">Administrador</option>
-        <option value="Vecino">Vecino</option>
+        <option value="superuser">Super usario</option>
+        <option value="administrator">Administrador</option>
+        <option value="user">Usuario</option>
       </select>
       <div
         class="text-red-600 text-xs mt-1"
@@ -125,7 +124,7 @@
         <select
           id="status"
           name="status"
-          [(ngModel)]="u.status!.name"
+          [(ngModel)]="u.userStatus!.name"
           required
           class="border rounded-lg p-2 w-full bg-gray-50"
           #typeCtrl="ngModel"
@@ -144,9 +143,13 @@
     <!-- Botón guardar -->
     <div class="mt-auto">
       <button
+      
         [disabled]="formUser.invalid"
-        class="bg-blue-600 text-white font-semibold px-6 py-2 rounded-lg hover:bg-blue-700 transition"
+        class="bg-blue-600 text-white font-semibold px-6 py-2 rounded-lg 
+        hover:bg-blue-700 transition 
+        disabled:bg-gray-300 disabled:text-gray-500 disabled:cursor-not-allowed"
         type="button"
+        (click)="guardarCambios()"
       >
         Guardar cambios
       </button>
@@ -163,3 +166,5 @@
   [message]="alertMessage"
   (close)="cerrarAlerta()"
 ></app-alert-modal>
+<!-- Spinner de carga -->
+<app-loading-spinner [show]="loading"></app-loading-spinner>
