@@ -8,9 +8,11 @@ import { EmergenciesComponent } from './modules/emergencies/emergencies.componen
 import { UsersComponent } from './modules/users/users.component';
 import { ReportDetailsComponent } from './modules/report-details/report-details.component';
 import { UserDetailsComponent } from './modules/user-details/user-details.component';
+import { AuthTypeGuard } from './shared/guards/auth.guard';
 // ...otros componentes
 
 export const routes: Routes = [
+
   // Redirección por defecto: root => login
   { path: '', pathMatch: 'full', redirectTo: 'login' },
 
@@ -22,6 +24,7 @@ export const routes: Routes = [
   {
     path: '',
     component: LayoutComponent,
+    canActivateChild: [AuthTypeGuard],
     children: [
       { path: 'dashboard', component: DashboardComponent },
       { path: 'reports', component: ReportsComponent },
@@ -33,7 +36,4 @@ export const routes: Routes = [
       // más rutas privadas
     ],
   },
-
-  // Ruta comodín (opcional: para 404)
-  // { path: '**', redirectTo: 'login' }
 ];
