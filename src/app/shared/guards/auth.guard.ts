@@ -1,24 +1,37 @@
-// src/app/guards/auth-type.guard.ts
 import { Injectable } from '@angular/core';
-import { CanActivate, Router } from '@angular/router';
+import { CanActivateChild, Router } from '@angular/router';
+import { jwtDecode  as jwt_decode} from 'jwt-decode';
 
 @Injectable({ providedIn: 'root' })
-export class AuthTypeGuard implements CanActivate {
+export class AuthTypeGuard implements CanActivateChild {
   constructor(private router: Router) {}
 
-  canActivate(): boolean {
-    const userString = localStorage.getItem('token');
-    if (!userString) {
-      console.log("Entro")
-      // this.router.navigate(['/login']);
+  canActivateChild(): boolean {
+    console.log('Guard ejecutado');
+    const token = localStorage.getItem('token');
+    if (!token) {
+      this.router.navigate(['/login']);
       return false;
     }
-    const user = JSON.parse(userString);
-    if (user.typeId === 3) {
+    let payload: any = {};
+    try {
+      payload = jwt_decode(token);
+      console.log('Payload JWT:', payload);
+    } catch (e) {
+      console.error('JWT inválido');
+      this.router.navigate(['/login']);
+      return false;
+    }
+    if (payload.typeId === '3') {
       this.router.navigate(['/login']);
       localStorage.removeItem('token');
-      localStorage.removeItem('user');
-      // this.router.navigate(['/login']);
+      return false;
+    }
+    // Verificar expiración
+    const now = Math.floor(Date.now() / 1000);
+    if (payload.exp && payload.exp < now) {
+      this.router.navigate(['/login']);
+      localStorage.removeItem('token');
       return false;
     }
     return true;

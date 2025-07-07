@@ -34,7 +34,8 @@ export class LoginComponent {
       });
       if (resp.code == 200) {
         localStorage.setItem('token', resp.data!.token);
-        await this.router.navigate(['/dashboard']);
+        console.log('Entro a 200');
+        this.router.navigate(['/dashboard']);
       } else {
         this.loginError = true;
         this.error = resp.message;

@@ -105,32 +105,35 @@ export class ApiService {
     // O según como manejes la autenticación en tu app
   }
   // --- LOGIN ---
-  login(credentials: LoginRequest): Promise<ApiResponse<LoginResponseData>> {
+  async login(
+    credentials: LoginRequest
+  ): Promise<ApiResponse<LoginResponseData>> {
     const url = `${this.baseUrl}/auth/login`;
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
 
-    return this.http
-      .post<ApiResponse<LoginResponseData>>(url, credentials, { headers })
-      .toPromise()
-      .then((resp) => {
-        if (!resp) {
-          // Maneja el caso improbable, pero siempre retorna un ApiResponse válido
-          return {
-            code: 500,
-            message: 'No response from server',
-            data: { token: '' },
-          };
-        }
-        return resp;
-      })
-      .catch((error) => {
-        // Convierte el error a un ApiResponse para mantener el tipo
+    try {
+      const resp = await firstValueFrom(
+        this.http.post<ApiResponse<LoginResponseData>>(url, credentials, {
+          headers,
+        })
+      );
+      if (!resp) {
+        // Maneja el caso improbable, pero siempre retorna un ApiResponse válido
         return {
-          code: error?.status || 500,
-          message: error?.error?.message || 'Error de red',
+          code: 500,
+          message: 'No response from server',
           data: { token: '' },
         };
-      });
+      }
+      return resp;
+    } catch (error: any) {
+      // Convierte el error a un ApiResponse para mantener el tipo
+      return {
+        code: error?.status || 500,
+        message: error?.error?.message || 'Error de red',
+        data: { token: '' },
+      };
+    }
   }
 
   // ==== REPORTES ====
