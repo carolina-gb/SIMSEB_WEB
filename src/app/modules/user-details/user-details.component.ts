@@ -7,6 +7,7 @@ import { NgIf } from '@angular/common';
 import { UserI } from '../../shared/interfaces/user.interface'; // ajusta el path si es necesario
 import { ApiService } from '../../shared/services/services';
 import { UserUpdateRequest } from '../../shared/interfaces/request.interface';
+import { jwtDecode as  jwt_decode} from 'jwt-decode';
 
 @Component({
   selector: 'app-user-details',
@@ -23,7 +24,7 @@ export class UserDetailsComponent implements OnInit {
   alertType: 'success' | 'error' | 'info' | 'warning' = 'info';
   alertTitle = '';
   alertMessage = '';
-
+  isSuperuser = false;
   constructor(
     private router: Router,
     private route: ActivatedRoute,
@@ -33,6 +34,11 @@ export class UserDetailsComponent implements OnInit {
   async ngOnInit() {
     const userId = this.route.snapshot.paramMap.get('userId')!;
     await this.loadUser(userId);
+    let payload: any = {};
+    // Aquí ajusta cómo recuperas el tipo real del usuario logueado
+    const token = localStorage.getItem('token');
+    payload = jwt_decode(token!);
+    this.isSuperuser = payload.typeId == 1;
   }
 
   async loadUser(userId: string) {
@@ -94,11 +100,7 @@ export class UserDetailsComponent implements OnInit {
     const resp = await this.services.updateUserById(userUpdate);
 
     if (resp.code === 200) {
-      this.mostrarAlerta(
-        'success',
-        'Usuario actualizado',
-        resp.message
-      );
+      this.mostrarAlerta('success', 'Usuario actualizado', resp.message);
       // Opcional: redireccionar o refrescar
       // this.router.navigate(['/users', resp.data]);
     } else {

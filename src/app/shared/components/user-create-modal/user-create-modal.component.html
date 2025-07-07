@@ -23,7 +23,7 @@
           <label class="block font-semibold mb-1">Correo electrónico</label>
           <input type="email" class="w-full border rounded-lg p-2 bg-gray-50" [(ngModel)]="user.email" name="email" required />
         </div>
-        <div>
+        <div *ngIf="isSuperuser">
           <label class="block font-semibold mb-1">Tipo</label>
           <select class="w-full border rounded-lg p-2 bg-gray-50" [(ngModel)]="user.typeName" name="typeName" required>
             <option value="" disabled selected>Selecciona un tipo</option>

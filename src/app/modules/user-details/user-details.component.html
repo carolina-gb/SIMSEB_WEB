@@ -97,7 +97,7 @@
       </div>
     </div>
     <!-- Combo para tipo de usuario -->
-    <div class="mb-4">
+    <div *ngIf="isSuperuser" class="mb-4">
       <label class="block font-semibold mb-2" for="type">Tipo de usuario</label>
       <select
         id="type"
@@ -119,27 +119,6 @@
         Debe seleccionar un tipo.
       </div>
     </div>
-    <div class="mb-4">
-        <label class="block font-semibold mb-2" for="status">Tipo de usuario</label>
-        <select
-          id="status"
-          name="status"
-          [(ngModel)]="u.userStatus!.name"
-          required
-          class="border rounded-lg p-2 w-full bg-gray-50"
-          #typeCtrl="ngModel"
-        >
-          <option value="" disabled>Seleccione tipo</option>
-          <option value="good">Bueno</option>
-          <option value="bad">Malo</option>
-        </select>
-        <div
-          class="text-red-600 text-xs mt-1"
-          *ngIf="typeCtrl.invalid && typeCtrl.touched"
-        >
-          Debe seleccionar un tipo.
-        </div>
-      </div>
     <!-- Botón guardar -->
     <div class="mt-auto">
       <button
