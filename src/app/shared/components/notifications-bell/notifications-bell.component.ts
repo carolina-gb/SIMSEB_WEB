@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { SignalRService } from '../../socket/signalR.service';
 import { NgFor, NgIf } from '@angular/common';
 import { ApiService } from '../../services/services';
+import { jwtDecode as jwt_decode } from 'jwt-decode';
 
 @Component({
   standalone: true,
@@ -32,11 +33,14 @@ export class NotificationsBellComponent implements OnInit {
       this.notifications = nots;
     });
     this.signalRService.unreadCount$.subscribe((count) => {
-      console.log('Contador actualizado', count);
+      console.log('Count badge actualizado:', count);
       this.unreadCount = count;
     });
     // 3. Arranca SignalR SOLO si tienes userId, por ejemplo:
-    const user = JSON.parse(localStorage.getItem('user')!);
+    let user: any = {};
+    // Aquí ajusta cómo recuperas el tipo real del usuario logueado
+    const token = localStorage.getItem('token');
+    user = jwt_decode(token!);
     if (user?.userId) this.signalRService.startConnection(user.userId);
   }
 

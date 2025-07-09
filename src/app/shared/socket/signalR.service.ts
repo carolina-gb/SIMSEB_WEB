@@ -9,7 +9,7 @@ export class SignalRService {
   private notificationsSubject = new BehaviorSubject<any[]>([]);
   public notifications$ = this.notificationsSubject.asObservable();
 
-  public unreadCountSubject = new BehaviorSubject<number>(0);
+  unreadCountSubject = new BehaviorSubject<number>(0);
   public unreadCount$ = this.unreadCountSubject.asObservable();
 
   // Llama esto UNA sola vez al iniciar sesión
@@ -34,13 +34,16 @@ export class SignalRService {
       console.log('Notificación recibida:', notification);
       const current = this.notificationsSubject.value;
       this.notificationsSubject.next([notification, ...current]);
-      this.unreadCountSubject.next(this.unreadCountSubject.value + 1); // Suma al badge
+      const actual = this.unreadCountSubject.value;
+      console.log('Valor previo del contador:', actual);
+      this.unreadCountSubject.next(actual + 1);
+      console.log('Valor actualizado:', this.unreadCountSubject.value);
     });
   }
 
   // Llama esto con la respuesta de getInitialNotifications
   loadInitialNotifications(initial: any[]) {
     this.notificationsSubject.next(initial ?? []);
-    this.unreadCountSubject.next(initial?.length || 0);
+    // this.unreadCountSubject.next(initial?.length || 0);
   }
 }
