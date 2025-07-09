@@ -1,12 +1,13 @@
 import { DatePipe, NgFor, NgIf } from '@angular/common';
 import { Component, EventEmitter, HostListener, Output } from '@angular/core';
+import { NotificationsBellComponent } from '../notifications-bell/notifications-bell.component';
 
 @Component({
   standalone: true,
   selector: 'app-header',
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.css'],
-  imports: [NgFor, NgIf, DatePipe],
+  imports: [NotificationsBellComponent],
 })
 export class HeaderComponent {
   @Output() toggleMenu = new EventEmitter<void>();

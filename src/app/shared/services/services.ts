@@ -373,4 +373,9 @@ export class ApiService {
       };
     }
   }
+  //Emergencies
+  async getInitialNotifications(skip = 0) {
+    const url = `${this.baseUrl}/Emergency?skip=${skip}`;
+    return await firstValueFrom(this.http.get<any>(url));
+  }
 }
