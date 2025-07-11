@@ -12,6 +12,7 @@ import {
 } from '../interfaces/request.interface';
 import {
   ApiResponse,
+  EmergencyListData,
   LoginResponseData,
   UserListData,
 } from '../interfaces/response.interface';
@@ -85,20 +86,6 @@ export class ApiService {
     // ...más infracciones
   ];
 
-  private emergencies: EmergencyI[] = [
-    {
-      emergency_id: 1,
-      type: { emergency_type_id: 1, name: 'Incendio' },
-      user: {
-        user_id: 1,
-        username: 'gabrielym',
-        identification: '0951111111',
-        email: 'gabriel@mail.com',
-      },
-      created_at: new Date('2025-06-28T18:00:00'),
-    },
-    // ...más emergencias
-  ];
   isAuthenticated(): boolean {
     // Aquí tu lógica real, por ejemplo, chequear si hay token en localStorage:
     return !!localStorage.getItem('token');
@@ -218,10 +205,25 @@ export class ApiService {
   }
 
   // ==== EMERGENCIAS ====
-  async getEmergencyList(): Promise<EmergencyI[]> {
-    return new Promise((resolve) =>
-      setTimeout(() => resolve(this.emergencies), 800)
-    );
+  async getEmergencies(skip = 0): Promise<ApiResponse<EmergencyListData>> {
+    const url = `${this.baseUrl}/Emergency?skip=${skip}`;
+    try {
+      const resp = await firstValueFrom(
+        this.http.get<ApiResponse<EmergencyListData>>(url)
+      );
+      if (resp) return resp;
+      return {
+        code: 500,
+        message: 'No response from server',
+        data: { count: 0, data: [] },
+      };
+    } catch (error: any) {
+      return {
+        code: error?.status || 500,
+        message: error?.error?.message || 'Error de red',
+        data: { count: 0, data: [] },
+      };
+    }
   }
 
   // --- USUARIOS ---
@@ -372,10 +374,5 @@ export class ApiService {
         data: { count: 0, data: [] },
       };
     }
-  }
-  //Emergencies
-  async getInitialNotifications(skip = 0) {
-    const url = `${this.baseUrl}/Emergency?skip=${skip}`;
-    return await firstValueFrom(this.http.get<any>(url));
   }
 }

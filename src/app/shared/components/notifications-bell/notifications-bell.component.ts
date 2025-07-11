@@ -3,6 +3,7 @@ import { SignalRService } from '../../socket/signalR.service';
 import { NgFor, NgIf } from '@angular/common';
 import { ApiService } from '../../services/services';
 import { jwtDecode as jwt_decode } from 'jwt-decode';
+import { EmergencyI } from '../../interfaces/emergency.interface';
 
 @Component({
   standalone: true,
@@ -12,7 +13,7 @@ import { jwtDecode as jwt_decode } from 'jwt-decode';
   styleUrl: './notifications-bell.component.css',
 })
 export class NotificationsBellComponent implements OnInit {
-  notifications: any[] = [];
+  notifications: EmergencyI[] = [];
   showNotifications = false;
   unreadCount = 0;
 
@@ -23,7 +24,7 @@ export class NotificationsBellComponent implements OnInit {
 
   async ngOnInit() {
     // 1. Cargar notificaciones viejas
-    const resp = await this.services.getInitialNotifications();
+    const resp = await this.services.getEmergencies();
     const initial = resp.data?.data || [];
     this.notifications = initial;
     this.signalRService.loadInitialNotifications(initial);
