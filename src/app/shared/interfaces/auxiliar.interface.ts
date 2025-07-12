@@ -1,8 +1,8 @@
 // Usuario simple
 export interface UserShortI {
-  user_id: number;
+  userId: number;
   username: string;
-  full_name?: string; // puedes componerlo con first/last name
+  fullName?: string; // puedes componerlo con first/last name
   identification: string;
   email: string;
 }
@@ -33,10 +33,10 @@ export interface ReportStageI {
 
 // Tipo de infracción
 export interface InfractionTypeI {
-  infraction_type_id: number;
+  infractionTypeId: number;
   name: string;
-  show_name?: string;
-  created_at?: Date;
+  showName: string;
+  createdAt: Date;
 }
 
 // Tipo de emergencia

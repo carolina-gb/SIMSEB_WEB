@@ -5,13 +5,15 @@ import { environment } from '../../../enviroments/enviroment';
 import { InfractionI } from '../interfaces/infraction.interface';
 import { ReportI } from '../interfaces/report.interface';
 import {
-  LoginRequest,
-  ReportUpdateRequest,
-  UserUpdateRequest,
+  InfractionCreateRequestI,
+  LoginRequestI,
+  ReportUpdateRequestI,
+  UserUpdateRequestI,
 } from '../interfaces/request.interface';
 import {
   ApiResponse,
   EmergencyListData,
+  InfractionListData,
   LoginResponseData,
   ReportListData,
   UserListData,
@@ -22,26 +24,6 @@ import { firstValueFrom } from 'rxjs';
 export class ApiService {
   private baseUrl = environment.apiUrl;
   constructor(private http: HttpClient) {}
-  // ==== MOCK DATA ====
-
-  private infractions: InfractionI[] = [
-    {
-      infraction_id: 1,
-      infraction_number: 'INF-001',
-      user: {
-        user_id: 1,
-        username: 'gabrielym',
-        identification: '0951111111',
-        email: 'gabriel@mail.com',
-      },
-      type: { infraction_type_id: 1, name: 'Ruido excesivo' },
-      active: true,
-      amount: 50,
-      created_at: new Date('2025-06-01T10:00:00'),
-      updated_at: new Date('2025-06-01T10:00:00'),
-    },
-    // ...más infracciones
-  ];
 
   isAuthenticated(): boolean {
     // Aquí tu lógica real, por ejemplo, chequear si hay token en localStorage:
@@ -50,7 +32,7 @@ export class ApiService {
   }
   // --- LOGIN ---
   async login(
-    credentials: LoginRequest
+    credentials: LoginRequestI
   ): Promise<ApiResponse<LoginResponseData>> {
     const url = `${this.baseUrl}/auth/login`;
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
@@ -123,7 +105,7 @@ export class ApiService {
     }
   }
 
-  async updateReport(data: ReportUpdateRequest): Promise<ApiResponse<any>> {
+  async updateReport(data: ReportUpdateRequestI): Promise<ApiResponse<any>> {
     const url = `${this.baseUrl}/Report/stage`;
     try {
       const resp = await firstValueFrom(
@@ -148,47 +130,113 @@ export class ApiService {
   }
 
   // ==== INFRACCIONES ====
-  async getInfractionList(): Promise<InfractionI[]> {
-    return new Promise((resolve) =>
-      setTimeout(() => resolve(this.infractions), 800)
-    );
+  async createInfraction(
+    data: InfractionCreateRequestI
+  ): Promise<ApiResponse<InfractionI>> {
+    const url = `${this.baseUrl}/Infraction`;
+    try {
+      const resp = await firstValueFrom(
+        this.http.post<ApiResponse<InfractionI>>(url, data)
+      );
+      if (resp) return resp;
+      return {
+        code: 500,
+        message: 'No response from server',
+        data: null,
+      };
+    } catch (error: any) {
+      return {
+        code: error?.status || 500,
+        message: error?.error?.message || 'Error de red',
+        data: null,
+      };
+    }
   }
 
-  async getInfractionById(
-    infraction_id: number
-  ): Promise<InfractionI | undefined> {
-    return new Promise((resolve) =>
-      setTimeout(
-        () =>
-          resolve(
-            this.infractions.find((i) => i.infraction_id === infraction_id)
-          ),
-        500
-      )
-    );
+  async getInfractions(skip = 0): Promise<ApiResponse<InfractionListData>> {
+    const url = `${this.baseUrl}/Infraction/all?skip=${skip}`;
+    try {
+      const resp = await firstValueFrom(
+        this.http.get<ApiResponse<InfractionListData>>(url)
+      );
+      if (resp) return resp;
+      return {
+        code: 500,
+        message: 'No response from server',
+        data: { count: 0, data: [] },
+      };
+    } catch (error: any) {
+      return {
+        code: error?.status || 500,
+        message: error?.error?.message || 'Error de red',
+        data: { count: 0, data: [] },
+      };
+    }
+  }
+
+  async getInfractionById(userId: string): Promise<ApiResponse<InfractionI>> {
+    const url = `${this.baseUrl}/Infraction/${userId}`;
+    try {
+      const resp = await firstValueFrom(
+        this.http.get<ApiResponse<InfractionI>>(url)
+      );
+      if (resp) return resp;
+      return {
+        code: 500,
+        message: 'No response from server',
+        data: null,
+      };
+    } catch (error: any) {
+      return {
+        code: error?.status || 500,
+        message: error?.error?.message || 'Error de red',
+        data: null,
+      };
+    }
+  }
+
+  async inactiveInfractionById(userId: string): Promise<ApiResponse<string>> {
+    const url = `${this.baseUrl}/Infraction/toggle/${userId}`;
+    try {
+      const resp = await firstValueFrom(
+        this.http.put<ApiResponse<string>>(url, null)
+      );
+      if (resp) return resp;
+      return {
+        code: 500,
+        message: 'No response from server',
+        data: null,
+      };
+    } catch (error: any) {
+      return {
+        code: error?.status || 500,
+        message: error?.error?.message || 'Error de red',
+        data: null,
+      };
+    }
   }
 
   async updateInfraction(
-    infraction_id: number,
-    data: Partial<InfractionI>
-  ): Promise<{ success: boolean; updated?: InfractionI }> {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        const idx = this.infractions.findIndex(
-          (i) => i.infraction_id === infraction_id
-        );
-        if (idx >= 0) {
-          this.infractions[idx] = {
-            ...this.infractions[idx],
-            ...data,
-            updated_at: new Date(),
-          };
-          resolve({ success: true, updated: this.infractions[idx] });
-        } else {
-          resolve({ success: false });
-        }
-      }, 800);
-    });
+    data: InfractionCreateRequestI
+  ): Promise<ApiResponse<String>> {
+    const url = `${this.baseUrl}/Infraction/update-type`;
+    try {
+      const resp = await firstValueFrom(
+        this.http.put<ApiResponse<String>>(url, data)
+      );
+      if (resp) return resp;
+      return {
+        code: 500,
+        message: 'No response from server',
+        data: null,
+      };
+    } catch (error: any) {
+      return {
+        code: error?.status || 500,
+        message: error?.error?.message || 'Error de red',
+        data: null,
+      };
+    }
   }
 
   // ==== EMERGENCIAS ====
@@ -310,7 +358,9 @@ export class ApiService {
     }
   }
 
-  async updateUserById(userData: UserUpdateRequest): Promise<ApiResponse<any>> {
+  async updateUserById(
+    userData: UserUpdateRequestI
+  ): Promise<ApiResponse<any>> {
     const url = `${this.baseUrl}/User/update`;
     try {
       const resp = await firstValueFrom(

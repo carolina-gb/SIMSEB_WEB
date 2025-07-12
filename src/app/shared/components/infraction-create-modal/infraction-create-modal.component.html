@@ -1,0 +1,59 @@
+<!-- 👇 Solo se renderiza si open === true -->
+<div *ngIf="open" class="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-50">
+  <div
+    class="bg-white rounded-2xl shadow-xl max-w-md w-full p-8 relative animate-scale-in"
+  >
+    <!-- Botón cerrar -->
+    <button
+      class="absolute top-2 right-2 text-gray-400 hover:text-gray-700 text-xl"
+      (click)="onClose()"
+    >
+      ×
+    </button>
+
+    <!-- Título -->
+    <h2 class="text-xl font-bold mb-6 text-gray-700">
+      Crear infracción
+    </h2>
+
+    <!-- Formulario -->
+    <form (ngSubmit)="onSubmit()" autocomplete="off" class="flex flex-col gap-4">
+      <!-- Usuario -->
+      <div>
+        <label class="block font-semibold mb-1">ID de usuario (UUID)</label>
+        <input
+          type="text"
+          class="w-full border rounded-lg p-2 bg-gray-50"
+          [(ngModel)]="infraction.userId"
+          name="userId"
+          required
+          placeholder="18642d50-7fd5-4033-8ae7-a8f642648340"
+        />
+      </div>
+
+      <!-- Tipo -->
+      <div>
+        <label class="block font-semibold mb-1">Tipo de infracción</label>
+        <select
+          class="w-full border rounded-lg p-2 bg-gray-50"
+          [(ngModel)]="infraction.typeId"
+          name="typeId"
+          required
+        >
+          <option value="0" disabled selected>Selecciona un tipo</option>
+          <option *ngFor="let t of typeOptions" [ngValue]="t.id">
+            {{ t.label }}
+          </option>
+        </select>
+      </div>
+
+      <!-- Botón -->
+      <button
+        type="submit"
+        class="bg-blue-600 text-white font-semibold px-6 py-2 rounded-lg hover:bg-blue-700 transition mt-2"
+      >
+        Crear
+      </button>
+    </form>
+  </div>
+</div>

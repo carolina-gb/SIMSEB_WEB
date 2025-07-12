@@ -6,7 +6,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { NgIf } from '@angular/common';
 import { UserI } from '../../shared/interfaces/user.interface'; // ajusta el path si es necesario
 import { ApiService } from '../../shared/services/services';
-import { UserUpdateRequest } from '../../shared/interfaces/request.interface';
+import { UserUpdateRequestI } from '../../shared/interfaces/request.interface';
 import { jwtDecode as  jwt_decode} from 'jwt-decode';
 
 @Component({
@@ -76,7 +76,7 @@ export class UserDetailsComponent implements OnInit {
     const lastName = lastNameArr.join(' ');
 
     // Arma el DTO para actualizar
-    const userUpdate: UserUpdateRequest = {
+    const userUpdate: UserUpdateRequestI = {
       userId: this.user.userId,
       username: this.user.username,
       name: name,
@@ -127,7 +127,7 @@ export class UserDetailsComponent implements OnInit {
   isEmailValid(email: string) {
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
   }
-  camposValidos(data: UserUpdateRequest): boolean {
+  camposValidos(data: UserUpdateRequestI): boolean {
     return !!(
       data.username &&
       data.name &&

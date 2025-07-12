@@ -1,4 +1,5 @@
 import { EmergencyI } from './emergency.interface';
+import { InfractionI } from './infraction.interface';
 import { ReportI } from './report.interface';
 import { UserI } from './user.interface';
 
@@ -25,4 +26,8 @@ export interface EmergencyListData {
 export interface ReportListData {
   count: number;
   data: ReportI[];
+}
+export interface InfractionListData {
+  count: number;
+  data: InfractionI[];
 }

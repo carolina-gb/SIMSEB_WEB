@@ -7,7 +7,7 @@ import { Router } from '@angular/router';
 import { ApiService } from '../../services/services';
 import { UserI } from '../../interfaces/user.interface';
 import { UserCreateModalComponent } from '../user-create-modal/user-create-modal.component';
-import { UserCreateI } from '../../interfaces/request.interface';
+import { UserCreateRequestI } from '../../interfaces/request.interface';
 import { ConfirmModalComponent } from '../confirm-modal/confirm-modal.component';
 
 @Component({
@@ -118,7 +118,7 @@ export class UsersListComponent implements OnInit {
   }
   showUserCreate = false;
 
-  async crearUsuario(user: UserCreateI) {
+  async crearUsuario(user: UserCreateRequestI) {
     const resp = await this.services.createUser(user);
 
     if (resp.code === 201) {

@@ -30,12 +30,12 @@ export class SummaryModalComponent {
         ];
       case 'infraccion':
         return [
-          { label: 'N° de infracción', value: this.data.infraction_number },
-          { label: 'Usuario', value: this.data.username },
-          { label: 'Tipo', value: this.data.type_name },
+          { label: 'N° de infracción', value: this.data.infractionNumber },
+          { label: 'Usuario', value: this.data.user.fullName },
+          { label: 'Tipo', value: this.data.type.showName },
           { label: 'Monto', value: this.data.amount },
           { label: 'Estado', value: this.data.active ? 'Activa' : 'Inactiva' },
-          { label: 'Fecha', value: this.data.created_at },
+          { label: 'Fecha', value: this.data.createdAt },
         ];
       case 'usuario':
         return [

@@ -1,184 +1,126 @@
-import { NgClass, NgFor } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { NgClass, NgFor, CurrencyPipe, DatePipe } from '@angular/common';
 import { SummaryModalComponent } from '../summary-modal/summary-modal.component';
+import { ApiService } from '../../services/services';
+import { InfractionI } from '../../interfaces/infraction.interface';
+import { LoadingSpinnerComponent } from '../loading-spinner/loading-spinner.component';
+import { InfractionCreateModalComponent } from '../infraction-create-modal/infraction-create-modal.component';
+import { InfractionCreateRequestI } from '../../interfaces/request.interface';
 
 @Component({
   selector: 'app-infractions-list',
   standalone: true,
   templateUrl: './infractions-list.component.html',
   styleUrls: ['./infractions-list.component.css'],
-  imports: [NgClass, NgFor, SummaryModalComponent],
+  imports: [
+    NgClass,
+    NgFor,
+    SummaryModalComponent,
+    DatePipe,
+    CurrencyPipe,
+    LoadingSpinnerComponent,
+    InfractionCreateModalComponent,
+  ],
 })
-export class InfractionsListComponent {
-  // ¡Pon tus datos reales aquí!
-  infractions = [
-    {
-      infraction_id: 1,
-      infraction_number: 'INF-001',
-      user: {
-        user_id: 101,
-        username: 'juandelgado',
-        full_name: 'Juan Delgado',
-        email: 'juan.delgado@mail.com',
-      },
-      type: {
-        infraction_type_id: 1,
-        name: 'Ruido excesivo',
-        show_name: 'Ruido Excesivo',
-      },
-      active: true,
-      amount: 25.0,
-      created_at: '2025-05-10',
-      updated_at: '2025-05-10',
-      suspension_weeks: 2,
-    },
-    {
-      infraction_id: 2,
-      infraction_number: 'INF-002',
-      user: {
-        user_id: 102,
-        username: 'maria',
-        full_name: 'Maria Villacis',
-        email: 'maria@mail.com',
-      },
-      type: {
-        infraction_type_id: 2,
-        name: 'Basura en la vía',
-        show_name: 'Basura en la vía',
-      },
-      active: true,
-      amount: 15.0,
-      created_at: '2025-05-11',
-      updated_at: '2025-05-11',
-      suspension_weeks: 1,
-    },
-    {
-      infraction_id: 3,
-      infraction_number: 'INF-003',
-      user: {
-        user_id: 103,
-        username: 'carlos',
-        full_name: 'Carlos Gonzalez',
-        email: 'carlos.g@mail.com',
-      },
-      type: {
-        infraction_type_id: 1,
-        name: 'Alteración del orden',
-        show_name: 'Alteración del orden',
-      },
-      active: false,
-      amount: 40.0,
-      created_at: '2025-05-11',
-      updated_at: '2025-05-13',
-      suspension_weeks: 3,
-    },
-    {
-      infraction_id: 4,
-      infraction_number: 'INF-004',
-      user: {
-        user_id: 104,
-        username: 'angie',
-        full_name: 'Angie Bustos',
-        email: 'angie@mail.com',
-      },
-      type: {
-        infraction_type_id: 2,
-        name: 'Basura en la vía',
-        show_name: 'Basura en la vía',
-      },
-      active: true,
-      amount: 10.0,
-      created_at: '2025-05-13',
-      updated_at: '2025-05-13',
-      suspension_weeks: 2,
-    },
-    {
-      infraction_id: 5,
-      infraction_number: 'INF-005',
-      user: {
-        user_id: 105,
-        username: 'karla',
-        full_name: 'Karla Narváez',
-        email: 'karla@mail.com',
-      },
-      type: {
-        infraction_type_id: 3,
-        name: 'Vehículo mal estacionado',
-        show_name: 'Vehículo mal estacionado',
-      },
-      active: true,
-      amount: 35.0,
-      created_at: '2025-05-13',
-      updated_at: '2025-05-13',
-      suspension_weeks: 1,
-    },
-    {
-      infraction_id: 5,
-      infraction_number: 'INF-006',
-      user: {
-        user_id: 105,
-        username: 'karla',
-        full_name: 'Karla Narváez',
-        email: 'karla@mail.com',
-      },
-      type: {
-        infraction_type_id: 3,
-        name: 'Vehículo mal estacionado',
-        show_name: 'Vehículo mal estacionado',
-      },
-      active: true,
-      amount: 35.0,
-      created_at: '2025-05-13',
-      updated_at: '2025-05-13',
-      suspension_weeks: 1,
-    },
-    {
-      infraction_id: 5,
-      infraction_number: 'INF-007',
-      user: {
-        user_id: 105,
-        username: 'karla',
-        full_name: 'Karla Narváez',
-        email: 'karla@mail.com',
-      },
-      type: {
-        infraction_type_id: 3,
-        name: 'Vehículo mal estacionado',
-        show_name: 'Vehículo mal estacionado',
-      },
-      active: true,
-      amount: 35.0,
-      created_at: '2025-05-13',
-      updated_at: '2025-05-13',
-      suspension_weeks: 1,
-    },
-    // ...agrega más si necesitas
-  ];
+export class InfractionsListComponent implements OnInit {
+  // -------------------- Estado básico --------------------
+  infractions: InfractionI[] = [];
+  totalCount = 0;
+  loading = false;
+  errorMsg: string | null = null;
+  showInfractionCreate = false;
 
-  // Paginador
+  // paginador
   page = 1;
   pageSize = 5;
+
+  // modal
   showSummary = false;
-  summaryType: 'reporte' | 'infraccion' | 'usuario' = 'reporte';
+  summaryType: 'reporte' | 'infraccion' | 'usuario' = 'infraccion';
   summaryData: any = {};
 
+  constructor(private services: ApiService) {}
+
+  // -------------------- Ciclo de vida --------------------
+  async ngOnInit() {
+    await this.fetchPage(); // carga inicial
+  }
+
+  // -------------------- API --------------------
+  private async fetchPage() {
+    try {
+      this.loading = true;
+      this.errorMsg = null;
+
+      const skip = (this.page - 1) * this.pageSize;
+      const resp = await this.services.getInfractions(skip);
+
+      if (resp.code === 200 && resp.data) {
+        this.infractions = resp.data.data;
+        this.totalCount = resp.data.count;
+        console.log(this.infractions);
+      } else {
+        throw new Error(resp.message);
+      }
+    } catch (e: any) {
+      this.errorMsg = e.message ?? 'Ups, no se pudo cargar 😢';
+    } finally {
+      this.loading = false;
+    }
+  }
+
+  async toggleActive(infraction: InfractionI) {
+    this.loading = true;
+    const resp = await this.services.inactiveInfractionById(
+      infraction.infractionId
+    );
+    this.loading = false;
+    if (resp.code === 200) {
+      // parche local
+      this.infractions = this.infractions.map((i) =>
+        i.infractionId === infraction.infractionId
+          ? { ...i, active: !i.active }
+          : i
+      );
+    } else {
+      alert(resp.message);
+    }
+  }
+
+  // -------------------- Paginador --------------------
   get pagedInfractions() {
-    const start = (this.page - 1) * this.pageSize;
-    return this.infractions.slice(start, start + this.pageSize);
+    // Si tu backend ya retorna la página filtrada,
+    // simplemente devuelve this.infractions.
+    return this.infractions;
   }
+
   get totalPages() {
-    return Math.ceil(this.infractions.length / this.pageSize);
+    return Math.max(1, Math.ceil(this.totalCount / this.pageSize));
   }
-  changePage(newPage: number) {
+
+  async changePage(newPage: number) {
     if (newPage < 1 || newPage > this.totalPages) return;
     this.page = newPage;
+    await this.fetchPage();
   }
+
+  // -------------------- Modal helpers --------------------
   abrirResumen(tipo: 'reporte' | 'infraccion' | 'usuario', data: any) {
+    console.log(true);
     this.summaryType = tipo;
     this.summaryData = data;
     this.showSummary = true;
   }
+
   cerrarResumen() {
     this.showSummary = false;
+  }
+  cerrarCreateModal() {
+    this.showInfractionCreate = false;
+  }
+  crearInfraction(req: InfractionCreateRequestI) {
+    this.services.createInfraction(req).then((resp) => {
+      // refrescar lista, toast, etc.
+    });
   }
 }

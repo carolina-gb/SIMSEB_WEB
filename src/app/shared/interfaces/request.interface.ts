@@ -1,9 +1,9 @@
-export interface LoginRequest {
+export interface LoginRequestI {
   input: string;
   password: string;
 }
 
-export interface UserUpdateRequest {
+export interface UserUpdateRequestI {
   userId: string;
   username: string;
   name: string;
@@ -13,7 +13,7 @@ export interface UserUpdateRequest {
   typeId: number;
 }
 
-export interface UserCreateI {
+export interface UserCreateRequestI {
   username: string;
   name: string;
   lastName: string;
@@ -22,13 +22,18 @@ export interface UserCreateI {
   typeId: number;
 }
 
-export interface UserResetRequest {
+export interface UserResetRequestI {
   targetUsername: string;
   adminUsername: string;
 }
 
-export interface ReportUpdateRequest {
+export interface ReportUpdateRequestI {
   reportId: string;
   stageId: number;
   rejectReason: string;
+}
+
+export interface InfractionCreateRequestI {
+  userId: string,
+  typeId: number
 }
