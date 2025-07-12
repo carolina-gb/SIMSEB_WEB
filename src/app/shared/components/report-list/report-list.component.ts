@@ -36,8 +36,8 @@ export class ReportListComponent implements OnInit {
     this.loading = true;
     this.apiService
       .getReportList()
-      .then((data) => {
-        this.reports = data;
+      .then((res) => {
+        this.reports = res.data!.data;
         this.loading = false;
       })
       .catch(() => {
@@ -73,7 +73,7 @@ export class ReportListComponent implements OnInit {
     }
   }
 
-  goToDetail(reportId: number) {
+  goToDetail(reportId: string) {
     this.router.navigate(['/reports', reportId]);
   }
 

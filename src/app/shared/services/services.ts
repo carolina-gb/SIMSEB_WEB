@@ -3,17 +3,17 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '../../../enviroments/enviroment';
 import { InfractionI } from '../interfaces/infraction.interface';
-import { EmergencyI } from '../interfaces/emergency.interface';
 import { ReportI } from '../interfaces/report.interface';
 import {
   LoginRequest,
-  UserResetRequest,
+  ReportUpdateRequest,
   UserUpdateRequest,
 } from '../interfaces/request.interface';
 import {
   ApiResponse,
   EmergencyListData,
   LoginResponseData,
+  ReportListData,
   UserListData,
 } from '../interfaces/response.interface';
 import { firstValueFrom } from 'rxjs';
@@ -23,49 +23,6 @@ export class ApiService {
   private baseUrl = environment.apiUrl;
   constructor(private http: HttpClient) {}
   // ==== MOCK DATA ====
-  private reports: ReportI[] = [
-    {
-      report_id: 1,
-      case_number: 'REP-001',
-      type: { report_type_id: 1, name: 'Alteración del orden público' },
-      evidence_file: null,
-      user: {
-        user_id: 1,
-        username: 'gabrielym',
-        identification: '0951111111',
-        email: 'gabriel@mail.com',
-      },
-      description: 'Personas haciendo ruido en la madrugada.',
-      reject_reason: null,
-      reject_by: null,
-      stage: [{ report_stage_id: 1, name: 'in_course', show_name: 'En curso' }],
-      created_at: new Date('2025-05-15T12:00:00'),
-      updated_at: new Date('2025-05-15T12:00:00'),
-    },
-    {
-      report_id: 2,
-      case_number: 'REP-002',
-      type: {
-        report_type_id: 2,
-        name: 'Problemas de salubridad',
-        show_name: 'Problemas de salubridad',
-      },
-      evidence_file: null,
-      user: {
-        user_id: 2,
-        username: 'angienb',
-        identification: '0952222222',
-        email: 'angie@mail.com',
-      },
-      description: 'Basura acumulada en la esquina.',
-      reject_reason: 'No hay evidencia suficiente.',
-      reject_by: 1,
-      stage: [{ report_stage_id: 3, name: 'rejected', show_name: 'Rechazado' }],
-      created_at: new Date('2025-05-16T09:00:00'),
-      updated_at: new Date('2025-05-16T09:00:00'),
-    },
-    // ...más reportes
-  ];
 
   private infractions: InfractionI[] = [
     {
@@ -124,40 +81,70 @@ export class ApiService {
   }
 
   // ==== REPORTES ====
-  async getReportList(): Promise<ReportI[]> {
-    return new Promise((resolve) =>
-      setTimeout(() => resolve(this.reports), 800)
-    );
+  async getReportList(skip = 0): Promise<ApiResponse<ReportListData>> {
+    const url = `${this.baseUrl}/Report/all?skip=${skip}`;
+    try {
+      const resp = await firstValueFrom(
+        this.http.get<ApiResponse<ReportListData>>(url)
+      );
+      if (resp) return resp;
+      return {
+        code: 500,
+        message: 'No response from server',
+        data: { count: 0, data: [] },
+      };
+    } catch (error: any) {
+      return {
+        code: error?.status || 500,
+        message: error?.error?.message || 'Error de red',
+        data: { count: 0, data: [] },
+      };
+    }
   }
 
-  async getReportById(report_id: number): Promise<ReportI | undefined> {
-    return new Promise((resolve) =>
-      setTimeout(
-        () => resolve(this.reports.find((r) => r.report_id === report_id)),
-        500
-      )
-    );
+  async getReportById(userId: string): Promise<ApiResponse<ReportI>> {
+    const url = `${this.baseUrl}/Report/${userId}`;
+    try {
+      const resp = await firstValueFrom(
+        this.http.get<ApiResponse<ReportI>>(url)
+      );
+      if (resp) return resp;
+      return {
+        code: 500,
+        message: 'No response from server',
+        data: null,
+      };
+    } catch (error: any) {
+      return {
+        code: error?.status || 500,
+        message: error?.error?.message || 'Error de red',
+        data: null,
+      };
+    }
   }
 
-  async updateReport(
-    report_id: number,
-    data: Partial<ReportI>
-  ): Promise<{ success: boolean; updated?: ReportI }> {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        const idx = this.reports.findIndex((r) => r.report_id === report_id);
-        if (idx >= 0) {
-          this.reports[idx] = {
-            ...this.reports[idx],
-            ...data,
-            updated_at: new Date(),
-          };
-          resolve({ success: true, updated: this.reports[idx] });
-        } else {
-          resolve({ success: false });
-        }
-      }, 800);
-    });
+  async updateReport(data: ReportUpdateRequest): Promise<ApiResponse<any>> {
+    const url = `${this.baseUrl}/Report/stage`;
+    try {
+      const resp = await firstValueFrom(
+        this.http.put<ApiResponse<any>>(url, data)
+      );
+      if (resp.code == 200 || resp.code == 201) {
+        return resp;
+      } else {
+        return {
+          code: 500,
+          message: 'No response from server',
+          data: null,
+        };
+      }
+    } catch (error: any) {
+      return {
+        code: error?.status || 500,
+        message: error?.error?.message || 'Error de red',
+        data: null,
+      };
+    }
   }
 
   // ==== INFRACCIONES ====

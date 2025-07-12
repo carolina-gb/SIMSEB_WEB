@@ -1,15 +1,15 @@
 import { FileDataI, ReportStageI, ReportTypeI, UserShortI } from "./auxiliar.interface";
 
 export interface ReportI {
-  report_id: number;
-  case_number: string;
-  type: ReportTypeI;
-  evidence_file?: FileDataI | null;
-  user: UserShortI;
+  reportId: string;
+  caseNumber: string;
   description: string;
-  reject_reason?: string | null;
-  reject_by?: number | null;
-  stage: ReportStageI[];
-  created_at: Date;
-  updated_at: Date;
+  rejectReason: string | null;
+  rejectBy: string | null;
+  createdAt: string;
+  updatedAt: string;
+  evidenceFile: FileDataI | null;
+  type: ReportTypeI;
+  stage: ReportStageI;
+  // user?: UserShortI; // Descomenta si tu respuesta lo incluye en otro endpoint
 }

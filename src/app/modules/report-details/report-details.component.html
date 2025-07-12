@@ -22,22 +22,22 @@
       </div>
 
       <!-- Combo para estado -->
-      <div class="mb-4">
-        <label class="block font-semibold mb-2" for="estado">Estado</label>
+      <div>
+        <label for="stage" class="block font-semibold mb-1">Estado</label>
         <select
-          id="estado"
-          [(ngModel)]="selectedStatus"
-          class="border rounded-lg p-2 w-full bg-gray-50"
+          id="stage"
+          class="w-full border rounded-lg p-2 bg-gray-50"
+          [(ngModel)]="selectedStageId"
+          required
         >
-          <option value="Pendiente">Pendiente</option>
-          <option value="En progreso">En progreso</option>
-          <option value="Rechazado">Rechazado</option>
-          <option value="Resuelto">Resuelto</option>
+          <option *ngFor="let stage of reportStages" [value]="stage.report_stage_id">
+            {{ stage.show_name }}
+          </option>
         </select>
       </div>
 
       <!-- Si es rechazado, mostrar motivo -->
-      <div class="mb-6" *ngIf="selectedStatus === 'Rechazado'">
+      <div class="mb-6" *ngIf="selectedStageId == 3">
         <label class="block font-semibold mb-2" for="motivoRechazo"
           >Razón del rechazo</label
         >
@@ -85,7 +85,8 @@
         Regresar
       </button>
       <!-- Timeline o contenido principal -->
-      <app-tracking-timeline [steps]="trackingSteps"></app-tracking-timeline>
+      <app-tracking-timeline [stages]="report?.stage ? [report!.stage] : []"></app-tracking-timeline>
+
     </div>
   </div>
 </div>

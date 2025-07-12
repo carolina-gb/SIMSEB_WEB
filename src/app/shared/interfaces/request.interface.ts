@@ -26,3 +26,9 @@ export interface UserResetRequest {
   targetUsername: string;
   adminUsername: string;
 }
+
+export interface ReportUpdateRequest {
+  reportId: string;
+  stageId: number;
+  rejectReason: string;
+}

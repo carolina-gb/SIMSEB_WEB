@@ -1,4 +1,5 @@
 import { EmergencyI } from './emergency.interface';
+import { ReportI } from './report.interface';
 import { UserI } from './user.interface';
 
 export interface ApiResponse<T = any> {
@@ -19,4 +20,9 @@ export interface UserListData {
 export interface EmergencyListData {
   count: number;
   data: EmergencyI[];
+}
+
+export interface ReportListData {
+  count: number;
+  data: ReportI[];
 }

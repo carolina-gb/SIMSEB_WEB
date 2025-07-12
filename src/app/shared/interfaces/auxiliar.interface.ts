@@ -25,10 +25,10 @@ export interface FileDataI {
 
 // Estado del reporte (stage)
 export interface ReportStageI {
-  report_stage_id: number;
+  reportStageId: number;
   name: string;
-  show_name?: string;
-  created_at?: Date;
+  showName?: string;
+  createdAt?: Date;
 }
 
 // Tipo de infracción

@@ -12,9 +12,6 @@
                 N° de reporte
               </th>
               <th class="px-4 py-2 text-left font-semibold border-b">
-                Nombre de usuario
-              </th>
-              <th class="px-4 py-2 text-left font-semibold border-b">
                 Tipo de reporte
               </th>
               <th class="px-4 py-2 text-left font-semibold border-b">
@@ -28,20 +25,20 @@
           </thead>
           <tbody>
             <tr *ngFor="let report of pagedReports" class="hover:bg-gray-50">
-              <td class="px-4 py-3 border-b">{{ report.case_number }}</td>
-              <td class="px-4 py-3 border-b">{{ report.user.full_name }}</td>
+              <td class="px-4 py-3 border-b">{{ report.caseNumber }}</td>
+              <!-- <td class="px-4 py-3 border-b">{{ report. }}</td> -->
               <td class="px-4 py-3 border-b">
                 <span class="block bg-gray-100 px-3 py-1 rounded">{{
                   report.type.name
                 }}</span>
               </td>
-              <td class="px-4 py-3 border-b">{{ report.created_at }}</td>
+              <td class="px-4 py-3 border-b">{{ report.createdAt }}</td>
               <td class="px-4 py-3 border-b">
                 <span
-                  [ngClass]="getStatusClass(report.stage[report.stage.length - 1].name)"
+                  [ngClass]="getStatusClass(report.stage.name)"
                   class="px-4 py-1 rounded-full border text-xs font-medium"
                 >
-                  {{ report.stage[report.stage.length - 1].show_name }}
+                  {{ report.stage.showName }}
                 </span>
               </td>
               <td class="px-4 py-3 border-b">
@@ -52,11 +49,10 @@
                     title="Ver"
                     (click)="
                       abrirResumen('reporte', {
-                        case_number: report.case_number,
-                        username: report.user.full_name,
+                        case_number: report.caseNumber,
                         description: report.type.name,
                         stage_name: report.stage,
-                        created_at: report.created_at
+                        created_at: report.createdAt
                       })
                     "
                   >
@@ -84,7 +80,7 @@
                   <button
                     class="hover:text-yellow-600"
                     title="Editar"
-                    (click)="goToDetail(report.report_id)"
+                    (click)="goToDetail(report.reportId)"
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -122,10 +118,8 @@
         class="bg-white rounded-xl shadow p-4 flex flex-col gap-2"
       >
         <div class="flex justify-between">
-          <span class="text-xs text-gray-400"># {{ report.case_number }}</span>
-          <span class="font-semibold text-gray-500">{{
-            report.user.full_name
-          }}</span>
+          <span class="text-xs text-gray-400"># {{ report.caseNumber }}</span>
+         
         </div>
         <div>
           <span class="font-semibold">Tipo:</span>
@@ -135,15 +129,15 @@
         </div>
         <div>
           <span class="font-semibold">Fecha:</span>
-          <span class="ml-2">{{ report.created_at }}</span>
+          <span class="ml-2">{{ report.createdAt }}</span>
         </div>
         <div>
           <span class="font-semibold">Estado:</span>
           <span
             class="ml-2 px-2 py-1 rounded-full border text-xs font-medium"
-            [ngClass]="getStatusClass(report.stage[report.stage.length - 1].name)"
+            [ngClass]="getStatusClass(report.stage.name)"
           >
-            {{ report.stage[report.stage.length - 1].show_name }}
+            {{ report.stage.showName }}
           </span>
         </div>
         <div class="flex gap-2 mt-2">

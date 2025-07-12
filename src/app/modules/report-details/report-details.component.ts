@@ -3,7 +3,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { NgIf } from '@angular/common';
 import {
-  TrackingStep,
   TrackingTimelineComponent,
 } from '../../shared/components/tracking-timeline/tracking-timeline.component';
 import { ApiService } from '../../shared/services/services';
@@ -24,10 +23,9 @@ import { ReportI } from '../../shared/interfaces/report.interface';
   templateUrl: './report-details.component.html',
 })
 export class ReportDetailsComponent implements OnInit {
-  selectedStatus: string = 'Pendiente';
   motivoRechazo: string = '';
   loading = false;
-  reportId: number | null = null;
+  reportId: string | null = null;
   report: ReportI | null = null;
 
   // Para la alerta popup
@@ -36,43 +34,42 @@ export class ReportDetailsComponent implements OnInit {
   alertTitle = '';
   alertMessage = '';
 
+  // Nuevo: opciones para el combo de estado
+  reportStages = [
+    { reportStageId: 1, name: 'opened', show_name: 'Ingresado' },
+    { reportStageId: 2, name: 'in_course', show_name: 'En curso' },
+    { reportStageId: 3, name: 'rejected', show_name: 'Rechazado' },
+    { reportStageId: 4, name: 'approved', show_name: 'Aprobado' },
+  ];
+  selectedStageId: number = 1;
+
   constructor(
     private router: Router,
     private route: ActivatedRoute,
     private apiServices: ApiService
   ) {}
 
-  trackingSteps: TrackingStep[] = [
-    { color: 'bg-blue-400', title: 'Creado el', subtitle: '2025-05-15' },
-    {
-      color: 'bg-sky-400',
-      title: 'Pendiente.',
-      subtitle: 'Creado por Gabriel Yagual',
-    },
-    { color: 'bg-pink-400', title: 'En progreso.' },
-    {
-      color: 'bg-red-500',
-      title: 'Rechazado.',
-      subtitle: 'Información insuficiente.',
-    },
-    { color: 'bg-green-500', title: 'Resuelto el', subtitle: '2025-05-17' },
-  ];
-
   ngOnInit() {
     const idStr = this.route.snapshot.paramMap.get('id');
-    this.reportId = idStr ? +idStr : null;
+    this.reportId = idStr;
 
     if (this.reportId) {
       this.loading = true;
       this.apiServices
         .getReportById(this.reportId)
-        .then((report) => {
-          this.report = report ?? null;
-          // Sincroniza el estado con el del reporte real
-          if (report) {
-            this.selectedStatus =
-              report.stage[report.stage.length - 1].name ?? 'Pendiente';
-            this.motivoRechazo = report.reject_reason ?? '';
+        .then((resp) => {
+          this.report = resp.data ?? null;
+          if (this.report && this.report.stage) {
+            // Si tu backend devuelve "stage" como objeto, usa así:
+            // this.selectedStageId = this.report.stage.reportStageId ?? 1;
+            // Si devuelve array, usa el último:
+            if (Array.isArray(this.report.stage)) {
+              this.selectedStageId =
+                this.report.stage.at(-1)?.reportStageId ?? 1;
+            } else {
+              this.selectedStageId = this.report.stage.reportStageId ?? 1;
+            }
+            this.motivoRechazo = this.report.rejectReason ?? '';
           }
           this.loading = false;
         })
@@ -88,7 +85,7 @@ export class ReportDetailsComponent implements OnInit {
   guardarCambios() {
     if (!this.reportId || !this.report) return;
 
-    if (this.selectedStatus === 'Rechazado' && !this.motivoRechazo) {
+    if (this.selectedStageId === 3 && !this.motivoRechazo) {
       this.mostrarAlerta(
         'warning',
         'Motivo requerido',
@@ -98,35 +95,34 @@ export class ReportDetailsComponent implements OnInit {
     }
 
     this.loading = true;
-    // Simula update solo de estado y motivo rechazo
     this.apiServices
-      .updateReport(this.reportId, {
-        // stage: { ...this.report.stage, name: this.selectedStatus },
-        reject_reason:
-          this.selectedStatus === 'Rechazado' ? this.motivoRechazo : null,
+      .updateReport({
+        reportId: this.reportId,
+        stageId: this.selectedStageId, // Envía el número de estado
+        rejectReason: this.selectedStageId === 3 ? this.motivoRechazo : '',
       })
       .then((resp) => {
         this.loading = false;
-        if (resp && resp.success) {
+        if (resp.code === 200 || resp.code === 201) {
           this.mostrarAlerta(
             'success',
             '¡Éxito!',
-            'El estado se actualizó correctamente.'
+            resp.message || 'El estado se actualizó correctamente.'
           );
         } else {
           this.mostrarAlerta(
             'error',
             'Error',
-            'No se pudo actualizar el estado.'
+            resp.message || 'No se pudo actualizar el estado.'
           );
         }
       })
-      .catch(() => {
+      .catch((error) => {
         this.loading = false;
         this.mostrarAlerta(
           'error',
           'Error',
-          'No se pudo actualizar el estado.'
+          error?.message || 'No se pudo actualizar el estado.'
         );
       });
   }
