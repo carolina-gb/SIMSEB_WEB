@@ -23,11 +23,10 @@ export class SummaryModalComponent {
     switch (this.type) {
       case 'reporte':
         return [
-          { label: 'N° de reporte', value: this.data.case_number },
-          { label: 'Usuario', value: this.data.username },
+          { label: 'N° de reporte', value: this.data.caseNumber },
           { label: 'Descripción', value: this.data.description },
-          { label: 'Estado', value: this.data.stage_name },
-          { label: 'Fecha', value: this.data.created_at },
+          { label: 'Estado', value: this.data.stage },
+          { label: 'Fecha', value: this.data.createdAt },
         ];
       case 'infraccion':
         return [

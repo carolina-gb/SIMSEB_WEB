@@ -29,7 +29,7 @@
               <!-- <td class="px-4 py-3 border-b">{{ report. }}</td> -->
               <td class="px-4 py-3 border-b">
                 <span class="block bg-gray-100 px-3 py-1 rounded">{{
-                  report.type.name
+                  report.type.showName
                 }}</span>
               </td>
               <td class="px-4 py-3 border-b">{{ report.createdAt }}</td>
@@ -49,10 +49,10 @@
                     title="Ver"
                     (click)="
                       abrirResumen('reporte', {
-                        case_number: report.caseNumber,
-                        description: report.type.name,
-                        stage_name: report.stage,
-                        created_at: report.createdAt
+                        caseNumber: report.caseNumber,
+                        description: report.description,
+                        stage: report.stage.showName,
+                        createdAt: report.createdAt
                       })
                     "
                   >

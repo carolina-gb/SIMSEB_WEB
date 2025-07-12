@@ -8,16 +8,14 @@
       <div class="flex items-center justify-between mb-4">
         <div>
           <span class="font-semibold">Número del reporte:</span>
-          <span class="ml-2 text-gray-700">REP-001</span>
+          <span class="ml-2 text-gray-700">{{ report?.caseNumber }}</span>
         </div>
       </div>
 
       <div class="mb-4">
         <div class="font-semibold mb-2">Descripción</div>
         <div class="bg-gray-100 rounded-lg p-4 text-gray-600 text-sm">
-          En la casa de 2 pisos de color blanco, hay un grupo de personas
-          tomando y un carro con parlantes al tope de volumen, incluso se dicen
-          groserías, ya se les habló y fueron groseros respondiendo.
+          {{ report?.description }}
         </div>
       </div>
 
@@ -30,7 +28,10 @@
           [(ngModel)]="selectedStageId"
           required
         >
-          <option *ngFor="let stage of reportStages" [value]="stage.report_stage_id">
+          <option
+            *ngFor="let stage of reportStages"
+            [value]="stage.reportStageId"
+          >
             {{ stage.show_name }}
           </option>
         </select>
@@ -85,8 +86,7 @@
         Regresar
       </button>
       <!-- Timeline o contenido principal -->
-      <app-tracking-timeline [stages]="report?.stage ? [report!.stage] : []"></app-tracking-timeline>
-
+      <app-tracking-timeline [steps]="steps"></app-tracking-timeline>
     </div>
   </div>
 </div>

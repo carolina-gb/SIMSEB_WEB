@@ -6,7 +6,7 @@ import { ConfirmModalComponent } from '../confirm-modal/confirm-modal.component'
 import { LoadingSpinnerComponent } from '../loading-spinner/loading-spinner.component';
 import { SummaryModalComponent } from '../summary-modal/summary-modal.component';
 import { ApiService } from '../../services/services';
-import { ReportI } from '../../interfaces/report.interface';
+import { ReportI, SumaryReportI } from '../../interfaces/report.interface';
 
 @Component({
   selector: 'app-report-list',
@@ -22,7 +22,6 @@ import { ReportI } from '../../interfaces/report.interface';
   ],
 })
 export class ReportListComponent implements OnInit {
-  constructor(private router: Router, private apiService: ApiService) {}
   reports: ReportI[] = [];
   loading = false;
 
@@ -30,14 +29,20 @@ export class ReportListComponent implements OnInit {
   reportPageSize = 5;
   showSummary = false;
   summaryType: 'reporte' | 'infraccion' | 'usuario' = 'reporte';
-  summaryData: any = {};
+  summaryData: SumaryReportI | null = null;
+
+  showConfirm = false;
+  showSuccess = false;
+  eliminarEnProgreso = false;
+
+  constructor(private router: Router, private apiService: ApiService) {}
 
   ngOnInit() {
     this.loading = true;
     this.apiService
       .getReportList()
       .then((res) => {
-        this.reports = res.data!.data;
+        this.reports = res.data?.data || [];
         this.loading = false;
       })
       .catch(() => {
@@ -51,7 +56,7 @@ export class ReportListComponent implements OnInit {
     return this.reports.slice(start, start + this.reportPageSize);
   }
   get reportTotalPages() {
-    return Math.ceil(this.reports.length / this.reportPageSize);
+    return Math.ceil(this.reports.length / this.reportPageSize) || 1;
   }
   changeReportPage(newPage: number) {
     if (newPage < 1 || newPage > this.reportTotalPages) return;
@@ -77,10 +82,6 @@ export class ReportListComponent implements OnInit {
     this.router.navigate(['/reports', reportId]);
   }
 
-  showConfirm = false;
-  showSuccess = false;
-  eliminarEnProgreso = false;
-
   eliminarReporte() {
     this.showConfirm = false;
     this.eliminarEnProgreso = true;
@@ -97,11 +98,20 @@ export class ReportListComponent implements OnInit {
   cerrarSuccess() {
     this.showSuccess = false;
   }
-  abrirResumen(tipo: 'reporte' | 'infraccion' | 'usuario', data: any) {
+
+  abrirResumen(tipo: 'reporte' | 'infraccion' | 'usuario', data: SumaryReportI) {
+    // Arma el objeto de resumen con los campos necesarios
     this.summaryType = tipo;
-    this.summaryData = data;
+    this.summaryData = {
+      caseNumber: data.caseNumber,
+      description: data.description,
+      stage: data.stage || null,
+      createdAt: data.createdAt,
+    };
+    console.log(data);
     this.showSummary = true;
   }
+
   cerrarResumen() {
     this.showSummary = false;
   }

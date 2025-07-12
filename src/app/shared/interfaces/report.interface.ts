@@ -6,10 +6,17 @@ export interface ReportI {
   description: string;
   rejectReason: string | null;
   rejectBy: string | null;
-  createdAt: string;
-  updatedAt: string;
+  createdAt: Date;
+  updatedAt: Date;
   evidenceFile: FileDataI | null;
   type: ReportTypeI;
   stage: ReportStageI;
   // user?: UserShortI; // Descomenta si tu respuesta lo incluye en otro endpoint
+}
+
+export interface SumaryReportI {
+  caseNumber: string;
+  description: string;
+  stage: any;
+  createdAt: Date;
 }

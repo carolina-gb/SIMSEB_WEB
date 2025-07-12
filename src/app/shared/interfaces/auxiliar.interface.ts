@@ -11,8 +11,8 @@ export interface UserShortI {
 export interface ReportTypeI {
   report_type_id: number;
   name: string;
-  show_name?: string;
-  created_at?: Date;
+  showName?: string;
+  createdAt?: Date;
 }
 
 // Archivo
