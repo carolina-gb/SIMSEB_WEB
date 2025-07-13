@@ -26,10 +26,10 @@ export const routes: Routes = [
     component: LayoutComponent,
     canActivateChild: [AuthTypeGuard],
     children: [
-      { path: 'dashboard', component: DashboardComponent },
+      // { path: 'dashboard', component: DashboardComponent },
+      { path: 'emergencies', component: EmergenciesComponent },
       { path: 'reports', component: ReportsComponent },
       { path: 'infractions', component: InfractionsComponent },
-      { path: 'emergencies', component: EmergenciesComponent },
       { path: 'users', component: UsersComponent },
       { path: 'reports/:id', component: ReportDetailsComponent },
       { path: 'users/:userId', component: UserDetailsComponent },

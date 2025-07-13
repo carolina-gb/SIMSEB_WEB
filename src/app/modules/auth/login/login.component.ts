@@ -49,7 +49,7 @@ export class LoginComponent {
         console.log('Entro a 200');
         const payload = jwt_decode(resp.data!.token) as any;
         if (payload.typeId !== '3') {
-          this.router.navigate(['/dashboard']);
+          this.router.navigate(['/emergencies']);
         } else {
           this.mostrarAlerta(
             'warning',
