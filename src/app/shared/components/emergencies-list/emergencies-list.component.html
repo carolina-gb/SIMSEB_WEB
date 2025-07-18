@@ -130,13 +130,37 @@
               class="w-5 h-5 inline"
               fill="none"
               viewBox="0 0 24 24"
-              stroke="currentColor"
             >
+              <defs>
+                <linearGradient
+                  id="pinGradient"
+                  x1="12"
+                  y1="3"
+                  x2="12"
+                  y2="21"
+                  gradientUnits="userSpaceOnUse"
+                >
+                  <stop stop-color="#ef4444" />
+                  <!-- rojo-500 Tailwind -->
+                  <stop offset="1" stop-color="#2563eb" />
+                  <!-- blue-600 Tailwind -->
+                </linearGradient>
+              </defs>
               <path
+                d="M12 21s8-6.58 8-11.5A8 8 0 0 0 4 9.5C4 14.42 12 21 12 21z"
+                fill="url(#pinGradient)"
+                stroke="#2563eb"
+                stroke-width="2"
                 stroke-linecap="round"
                 stroke-linejoin="round"
+              />
+              <circle
+                cx="12"
+                cy="9.5"
+                r="3"
+                fill="#fff"
+                stroke="#ef4444"
                 stroke-width="2"
-                d="M9 20l-5.447-2.724A2 2 0 013 15.382V6.618a2 2 0 011.553-1.947L9 2m6 18l5.447-2.724A2 2 0 0021 15.382V6.618a2 2 0 00-1.553-1.947L15 2M9 20V4m6 16V4"
               />
             </svg>
           </button>
