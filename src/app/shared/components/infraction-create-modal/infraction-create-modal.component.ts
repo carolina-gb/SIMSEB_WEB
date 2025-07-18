@@ -1,11 +1,12 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { ComboBoxComponent } from '../combo-box/combo-box.component';
 
 @Component({
   selector: 'app-infraction-create-modal',
   standalone: true,
-  imports: [FormsModule, CommonModule],
+  imports: [FormsModule, CommonModule, ComboBoxComponent],
   templateUrl: './infraction-create-modal.component.html',
   styleUrl: './infraction-create-modal.component.css',
 })
@@ -37,7 +38,9 @@ export class InfractionCreateModalComponent {
       id
     );
   }
-
+  onUserSelected(user: any) {
+    this.infraction.userId = user.id; // Ajusta según tu modelo
+  }
   onSubmit() {
     if (
       !this.isValidUuid(this.infraction.userId) ||

@@ -335,6 +335,32 @@ export class ApiService {
       };
     }
   }
+  async searchUserByFilter(
+    term: string,
+    skip = 0
+  ): Promise<ApiResponse<UserListData>> {
+    const url = `${this.baseUrl}/User/get/by-username`;
+    const params = new HttpParams()
+      .set('username', term)
+      .set('skip', skip.toString()); // Por si quieres paginar, si no lo quitas
+    try {
+      const resp = await firstValueFrom(
+        this.http.get<ApiResponse<UserListData>>(url, { params })
+      );
+      if (resp) return resp;
+      return {
+        code: 500,
+        message: 'No response from server',
+        data: { count: 0, data: [] },
+      };
+    } catch (error: any) {
+      return {
+        code: error?.status || 500,
+        message: error?.error?.message || 'Error de red',
+        data: { count: 0, data: [] },
+      };
+    }
+  }
 
   async getUserById(userId: string): Promise<ApiResponse<UserListData>> {
     const url = `${this.baseUrl}/User/get/by-id`;

@@ -1,0 +1,38 @@
+<div class="relative w-full max-w-md">
+  <input
+    type="text"
+    [(ngModel)]="search"
+    (ngModelChange)="onSearchChange($event)"
+    (focus)="dropdownOpen = true"
+    placeholder="Buscar usuario por nombre, apellido o username..."
+    autocomplete="off"
+    class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+  />
+
+  <!-- Dropdown -->
+  <ul
+    *ngIf="dropdownOpen"
+    class="absolute left-0 bg-white border w-full z-10 mt-1 rounded-xl max-h-64 overflow-auto shadow-lg"
+  >
+    <li
+      *ngFor="let user of users"
+      (click)="selectUser(user)"
+      class="cursor-pointer px-4 py-2 hover:bg-blue-100 rounded-lg transition select-none"
+    >
+      <div class="font-medium">{{ user.username }}</div>
+      <div *ngIf="user.name || user.lastname" class="text-xs text-gray-500">
+        {{ user.name }} {{ user.lastname }}
+      </div>
+    </li>
+
+    <li
+      *ngIf="!loading && users.length === 0"
+      class="px-4 py-2 text-gray-400 select-none"
+    >
+      No hay resultados
+    </li>
+    <li *ngIf="loading" class="px-4 py-2 text-blue-500 select-none">
+      <span class="animate-pulse">Cargando...</span>
+    </li>
+  </ul>
+</div>

@@ -1,0 +1,22 @@
+<div
+  *ngIf="open"
+  class="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-50"
+>
+  <div class="bg-white rounded-2xl shadow-xl max-w-md w-full p-6 relative">
+    <button
+      class="absolute top-2 right-2 text-gray-400 hover:text-gray-700 text-xl"
+      (click)="open = false"
+    >
+      ×
+    </button>
+    <h3 class="text-lg font-bold mb-4">Ubicación en el mapa</h3>
+    <div
+      id="view-map"
+      style="height:16rem; width:100%; border-radius:0.75rem; background:#f7f7f7"
+    ></div>
+    <div class="mt-4 text-sm text-gray-700">
+      Latitud: <span class="font-mono">{{ lat }}</span><br />
+      Longitud: <span class="font-mono">{{ lng }}</span>
+    </div>
+  </div>
+</div>

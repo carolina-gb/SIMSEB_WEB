@@ -1,12 +1,14 @@
 import { NgClass, NgFor } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, viewChild } from '@angular/core';
 import { ApiService } from '../../services/services';
 import { EmergencyI } from '../../interfaces/emergency.interface';
+import { ViewChild } from '@angular/core';
+import { ModalMapaComponent } from '../modal-mapa/modal-mapa.component';
 
 @Component({
   selector: 'app-emergencies-list',
   standalone: true,
-  imports: [NgFor, NgClass],
+  imports: [NgFor, NgClass, ModalMapaComponent],
   templateUrl: './emergencies-list.component.html',
   styleUrl: './emergencies-list.component.css',
 })
@@ -25,6 +27,20 @@ export class EmergenciesListComponent implements OnInit {
     const resp = await this.services.getEmergencies();
     this.emergencies = resp.data!.data;
     this.loading = false;
+  }
+  selectedLat = -2.216637;
+  selectedLng = -79.927899;
+
+  @ViewChild('modalMapa') modalMapa!: ModalMapaComponent;
+
+  openMap(emergency: any) {
+    console.log('[EmergenciesListComponent] openMap llamado con:', emergency);
+    this.selectedLat = emergency.lat ?? -2.216637;
+    this.selectedLng = emergency.lng ?? -79.927899;
+    setTimeout(() => {
+      console.log('[EmergenciesListComponent] Abriendo modalMapa...');
+      this.modalMapa.open = true;
+    }, 10);
   }
 
   async getEmergencies() {
