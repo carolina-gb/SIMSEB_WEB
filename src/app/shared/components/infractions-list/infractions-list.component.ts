@@ -6,6 +6,7 @@ import { InfractionI } from '../../interfaces/infraction.interface';
 import { LoadingSpinnerComponent } from '../loading-spinner/loading-spinner.component';
 import { InfractionCreateModalComponent } from '../infraction-create-modal/infraction-create-modal.component';
 import { InfractionCreateRequestI } from '../../interfaces/request.interface';
+import { AlertModalComponent } from '../alert-modal/alert-modal.component';
 
 @Component({
   selector: 'app-infractions-list',
@@ -20,6 +21,7 @@ import { InfractionCreateRequestI } from '../../interfaces/request.interface';
     CurrencyPipe,
     LoadingSpinnerComponent,
     InfractionCreateModalComponent,
+    AlertModalComponent,
   ],
 })
 export class InfractionsListComponent implements OnInit {
@@ -29,7 +31,13 @@ export class InfractionsListComponent implements OnInit {
   loading = false;
   errorMsg: string | null = null;
   showInfractionCreate = false;
-
+  showSuccess = false;
+  showConfirm = false;
+  userToReset = '';
+  showAlert = false;
+  alertType: 'success' | 'error' | 'info' | 'warning' = 'info';
+  alertTitle = '';
+  alertMessage = '';
   // paginador
   page = 1;
   pageSize = 5;
@@ -118,9 +126,39 @@ export class InfractionsListComponent implements OnInit {
   cerrarCreateModal() {
     this.showInfractionCreate = false;
   }
-  crearInfraction(req: InfractionCreateRequestI) {
-    this.services.createInfraction(req).then((resp) => {
-      // refrescar lista, toast, etc.
-    });
+  mostrarAlertadialog(username: string) {
+    this.showConfirm = true;
+    this.userToReset = username;
+  }
+
+  async crearInfraction(req: InfractionCreateRequestI) {
+    const resp = await this.services.createInfraction(req);
+    if (resp.code == 200 || resp.code == 201) {
+      this.mostrarAlerta('success', 'Usuario creado con éxito', resp.message);
+      await this.fetchPage();
+      this.showSuccess = true;
+    } else {
+      this.mostrarAlerta(
+        'error',
+        'Error al actualizar',
+        resp.message || 'No se pudo actualizar el usuario.'
+      );
+    }
+  }
+  mostrarAlerta(
+    tipo: 'success' | 'error' | 'info' | 'warning',
+    titulo: string,
+    mensaje: string
+  ) {
+    this.alertType = tipo;
+    this.alertTitle = titulo;
+    this.alertMessage = mensaje;
+    this.showAlert = true;
+  }
+  cerrarAlerta() {
+    this.showAlert = false;
+  }
+  cerrarSuccess() {
+    this.showSuccess = false;
   }
 }
