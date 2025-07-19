@@ -25,6 +25,7 @@ export class UserDetailsComponent implements OnInit {
   alertTitle = '';
   alertMessage = '';
   isSuperuser = false;
+  userId = '';
   constructor(
     private router: Router,
     private route: ActivatedRoute,
@@ -32,8 +33,8 @@ export class UserDetailsComponent implements OnInit {
   ) {}
 
   async ngOnInit() {
-    const userId = this.route.snapshot.paramMap.get('userId')!;
-    await this.loadUser(userId);
+    this.userId = this.route.snapshot.paramMap.get('userId')!;
+    await this.loadUser();
     let payload: any = {};
     // Aquí ajusta cómo recuperas el tipo real del usuario logueado
     const token = localStorage.getItem('token');
@@ -41,10 +42,10 @@ export class UserDetailsComponent implements OnInit {
     this.isSuperuser = payload.typeId == 1;
   }
 
-  async loadUser(userId: string) {
+  async loadUser() {
     this.loading = true;
     try {
-      const resp = await this.services.getUserById(userId);
+      const resp = await this.services.getUserById(this.userId);
       if (resp.code === 200 && resp.data && resp.data.data.length > 0) {
         this.user = resp.data.data[0];
       } else {
@@ -152,5 +153,6 @@ export class UserDetailsComponent implements OnInit {
   }
   cerrarAlerta() {
     this.showAlert = false;
+    this.loadUser();
   }
 }

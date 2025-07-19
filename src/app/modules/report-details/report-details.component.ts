@@ -59,57 +59,7 @@ export class ReportDetailsComponent implements OnInit {
 
   ngOnInit() {
     this.reportId = this.route.snapshot.paramMap.get('id');
-    if (!this.reportId) {
-      this.mostrarAlerta('error', 'Error', 'No se encontró el ID del reporte.');
-      return;
-    }
-
-    this.loading = true;
-    this.apiServices
-      .getReportById(this.reportId)
-      .then((resp) => {
-        this.report = resp.data ?? null;
-        this.loading = false;
-
-        if (!this.report?.stage) {
-          return;
-        }
-
-        /* ───── Calculamos el array de pasos ───── */
-        const stageName = Array.isArray(this.report.stage)
-          ? this.report.stage.at(-1)?.name
-          : this.report.stage.name;
-
-        // 1️⃣  Filtra las etapas según el estado actual
-        let stagesFiltradas = this.STAGES;
-
-        // - Si el estado final es “approved”, descartamos “rejected”.
-        if (stageName === 'approved') {
-          stagesFiltradas = this.STAGES.filter((s) => s.name !== 'rejected');
-        }
-
-        // (Si quisieras la lógica inversa -ocultar approved cuando el actual
-        // es rejected- ya se cumple porque el slice se detiene antes de llegar
-        // a “approved”; no hace falta filtrar.)
-
-        // 2️⃣  Calcula el índice en la lista filtrada
-        const idx = stagesFiltradas.findIndex((s) => s.name === stageName);
-
-        // 3️⃣  Construye los pasos que enviará al timeline
-        this.steps = stagesFiltradas.slice(0, idx + 1).map((s) => ({
-          color: s.color,
-          title: s.title,
-          active: true,
-          subtitle:
-            s.name === stageName
-              ? this.formatearFecha(this.report!.createdAt)
-              : undefined,
-        }));
-      })
-      .catch(() => {
-        this.loading = false;
-        this.mostrarAlerta('error', 'Error', 'No se pudo cargar el reporte.');
-      });
+    this.loadReport()
   }
 
   /** Formateo simple */
@@ -126,7 +76,7 @@ export class ReportDetailsComponent implements OnInit {
 
   guardarCambios() {
     if (!this.reportId || !this.report) return;
-
+    this.selectedStageId = Number(this.selectedStageId);
     if (this.selectedStageId === 3 && !this.motivoRechazo) {
       this.mostrarAlerta(
         'warning',
@@ -137,6 +87,7 @@ export class ReportDetailsComponent implements OnInit {
     }
 
     this.loading = true;
+    this.selectedStageId = Number(this.selectedStageId);
     this.apiServices
       .updateReport({
         reportId: this.reportId,
@@ -182,9 +133,53 @@ export class ReportDetailsComponent implements OnInit {
 
   cerrarAlerta() {
     this.showAlert = false;
-    this.router.navigate(['/reports', this.reportId]);
+    this.loadReport();
   }
   goToBack() {
     this.router.navigate(['/reports']);
+  }
+  private loadReport(): void {
+    if (!this.reportId) {
+      this.mostrarAlerta('error', 'Error', 'No se encontró el ID del reporte.');
+      return;
+    }
+
+    this.loading = true;
+    this.apiServices
+      .getReportById(this.reportId)
+      .then((resp) => {
+        this.report = resp.data ?? null;
+        this.loading = false;
+
+        if (!this.report?.stage) {
+          return;
+        }
+
+        // ─── Armar los pasos del timeline (lo mismo que tenías) ───
+        const stageName = Array.isArray(this.report.stage)
+          ? this.report.stage.at(-1)?.name
+          : this.report.stage.name;
+
+        let stagesFiltradas = this.STAGES;
+        if (stageName === 'approved') {
+          stagesFiltradas = this.STAGES.filter((s) => s.name !== 'rejected');
+        }
+
+        const idx = stagesFiltradas.findIndex((s) => s.name === stageName);
+
+        this.steps = stagesFiltradas.slice(0, idx + 1).map((s) => ({
+          color: s.color,
+          title: s.title,
+          active: true,
+          subtitle:
+            s.name === stageName
+              ? this.formatearFecha(this.report!.createdAt)
+              : undefined,
+        }));
+      })
+      .catch(() => {
+        this.loading = false;
+        this.mostrarAlerta('error', 'Error', 'No se pudo cargar el reporte.');
+      });
   }
 }
