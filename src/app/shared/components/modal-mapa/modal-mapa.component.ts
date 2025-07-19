@@ -37,7 +37,7 @@ export class ModalMapaComponent implements AfterViewChecked {
         this.map.off();
         this.map.remove();
       }
-      this.map = L.map('view-map').setView([this.lat, this.lng], 15);
+      this.map = L.map('view-map').setView([this.lat, this.lng], 18);
       L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '© OpenStreetMap contributors',
       }).addTo(this.map);
