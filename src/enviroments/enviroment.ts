@@ -1,4 +1,4 @@
 export const environment = {
   production: false,
-  apiUrl: 'http://localhost:5255/api',
+  apiUrl: 'https://simseb.onrender.com/api',
 };
