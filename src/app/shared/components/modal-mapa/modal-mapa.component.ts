@@ -1,5 +1,6 @@
 import { AfterViewChecked, Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import * as L from 'leaflet';
 
 @Component({
   selector: 'app-modal-mapa',
@@ -31,17 +32,13 @@ export class ModalMapaComponent implements AfterViewChecked {
   }
 
   initMap() {
-    // ...tu código del mapa...
-    import('leaflet').then((L) => {
-      if (this.map) {
-        this.map.off();
-        this.map.remove();
-      }
-      this.map = L.map('view-map').setView([this.lat, this.lng], 18);
-      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '© OpenStreetMap contributors',
-      }).addTo(this.map);
-      this.marker = L.marker([this.lat, this.lng]).addTo(this.map);
-    });
+    if (this.map) {
+      this.map.off().remove();
+    }
+    this.map = L.map('view-map').setView([this.lat, this.lng], 18);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '© OpenStreetMap contributors',
+    }).addTo(this.map);
+    this.marker = L.marker([this.lat, this.lng]).addTo(this.map);
   }
 }
