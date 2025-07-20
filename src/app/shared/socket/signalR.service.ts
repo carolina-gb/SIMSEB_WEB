@@ -2,9 +2,11 @@
 import { Injectable } from '@angular/core';
 import * as signalR from '@microsoft/signalr';
 import { BehaviorSubject } from 'rxjs';
+import { environment } from '../../../enviroments/enviroment';
 
 @Injectable({ providedIn: 'root' })
 export class SignalRService {
+  private baseUrl = environment.apiUrl;
   private hubConnection: signalR.HubConnection | null = null;
   private notificationsSubject = new BehaviorSubject<any[]>([]);
   public notifications$ = this.notificationsSubject.asObservable();
@@ -17,7 +19,7 @@ export class SignalRService {
     if (this.hubConnection) return; // Evita múltiples conexiones
 
     this.hubConnection = new signalR.HubConnectionBuilder()
-      .withUrl('http://localhost:5255/hub/notifications', {
+      .withUrl(`${this.baseUrl}/hub/notifications`, {
         accessTokenFactory: () => localStorage.getItem('token') || '',
       })
       .build();
@@ -38,6 +40,7 @@ export class SignalRService {
       console.log('Valor previo del contador:', actual);
       this.unreadCountSubject.next(actual + 1);
       console.log('Valor actualizado:', this.unreadCountSubject.value);
+      window.location.reload(); 
     });
   }
 
