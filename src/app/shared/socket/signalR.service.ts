@@ -6,7 +6,7 @@ import { environment } from '../../../enviroments/enviroment';
 
 @Injectable({ providedIn: 'root' })
 export class SignalRService {
-  private baseUrl = environment.apiUrl;
+  private baseUrl = environment.apisocket;
   private hubConnection: signalR.HubConnection | null = null;
   private notificationsSubject = new BehaviorSubject<any[]>([]);
   public notifications$ = this.notificationsSubject.asObservable();
