@@ -247,38 +247,37 @@
             </button>
           </div>
         </div>
-
-        <!-- Paginador mobile centrado -->
-        <div class="flex items-center justify-center mt-6 gap-2">
-          <button
-            class="px-3 py-1 rounded border border-gray-200 shadow bg-white hover:bg-gray-100 transition disabled:opacity-40 disabled:cursor-not-allowed"
-            [disabled]="userPage === 1"
-            (click)="changeUserPage(userPage - 1)"
-          >
-            Anterior
-          </button>
-          <ng-container
-            *ngFor="let p of [].constructor(userTotalPages); let i = index"
-          >
-            <button
-              class="px-3 py-1 rounded border border-gray-200 shadow hover:bg-gray-100 transition"
-              [ngClass]="{
-                'bg-blue-600 text-white border-blue-600': userPage === i + 1
-              }"
-              (click)="changeUserPage(i + 1)"
-            >
-              {{ i + 1 }}
-            </button>
-          </ng-container>
-          <button
-            class="px-3 py-1 rounded border border-gray-200 shadow bg-white hover:bg-gray-100 transition disabled:opacity-40 disabled:cursor-not-allowed"
-            [disabled]="userPage === userTotalPages"
-            (click)="changeUserPage(userPage + 1)"
-          >
-            Siguiente
-          </button>
-        </div>
       </div>
+    </div>
+    <!-- Paginador mobile centrado -->
+    <div class="flex items-center justify-center mt-6 gap-2">
+      <button
+        class="px-3 py-1 rounded border border-gray-200 shadow bg-white hover:bg-gray-100 transition disabled:opacity-40 disabled:cursor-not-allowed"
+        [disabled]="userPage === 1"
+        (click)="changeUserPage(userPage - 1)"
+      >
+        Anterior
+      </button>
+      <ng-container
+        *ngFor="let p of [].constructor(userTotalPages); let i = index"
+      >
+        <button
+          class="px-3 py-1 rounded border border-gray-200 shadow hover:bg-gray-100 transition"
+          [ngClass]="{
+            'bg-blue-600 text-white border-blue-600': userPage === i + 1
+          }"
+          (click)="changeUserPage(i + 1)"
+        >
+          {{ i + 1 }}
+        </button>
+      </ng-container>
+      <button
+        class="px-3 py-1 rounded border border-gray-200 shadow bg-white hover:bg-gray-100 transition disabled:opacity-40 disabled:cursor-not-allowed"
+        [disabled]="userPage === userTotalPages"
+        (click)="changeUserPage(userPage + 1)"
+      >
+        Siguiente
+      </button>
     </div>
   </div>
 </div>

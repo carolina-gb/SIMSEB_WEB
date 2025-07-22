@@ -1,5 +1,5 @@
 export const environment = {
   production: false,
-  apiUrl: 'https://simseb.onrender.com/api',
+  apiUrl: 'http://localhost:5255/api',
   apisocket: 'https://simseb.onrender.com',
 };

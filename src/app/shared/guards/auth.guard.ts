@@ -9,12 +9,16 @@ export class AuthTypeGuard implements CanActivateChild {
   canActivateChild(): boolean {
     console.log('Guard ejecutado');
     const token = localStorage.getItem('token');
-    if (!token) {
-      this.router.navigate(['/login']);
-      return false;
-    }
+    // if (!token) {
+    //   this.router.navigate(['/login']);
+    //   return false;
+    // }
     let payload: any = {};
     try {
+      if (!token) {
+        this.router.navigate(['/login']);
+        return false;
+      }
       payload = jwt_decode(token);
       console.log('Payload JWT:', payload);
     } catch (e) {

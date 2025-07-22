@@ -24,7 +24,7 @@ import { ReportI, SumaryReportI } from '../../interfaces/report.interface';
 export class ReportListComponent implements OnInit {
   reports: ReportI[] = [];
   loading = false;
-
+  reportTotalCount = 0;
   reportPage = 1;
   reportPageSize = 5;
   showSummary = false;
@@ -35,32 +35,43 @@ export class ReportListComponent implements OnInit {
   showSuccess = false;
   eliminarEnProgreso = false;
 
-  constructor(private router: Router, private apiService: ApiService) {}
+  constructor(private router: Router, private services: ApiService) {}
 
-  ngOnInit() {
-    this.loading = true;
-    this.apiService
-      .getReportList()
-      .then((res) => {
-        this.reports = res.data?.data || [];
-        this.loading = false;
-      })
-      .catch(() => {
-        this.loading = false;
-        // Aquí podrías mostrar una alerta de error si quieres
-      });
+  async ngOnInit() {
+    await this.getAllReports(); 
   }
-
+  async getAllReports() {
+    const skip = (this.reportPage - 1) * this.reportPageSize;
+    this.loading = true;
+    try {
+      const resp = await this.services.getReportList(skip);
+      console.log(resp);
+      if (resp.code === 200) {
+        this.reports = resp.data!.data;
+        this.reportTotalCount = resp.data!.count;
+      } else {
+        this.reports = [];
+        this.reportTotalCount = 0;
+      }
+    } catch (err) {
+      this.reports = [];
+      this.reportTotalCount = 0;
+      // Opcional: mostrar alerta aquí
+    } finally {
+      this.loading = false;
+    }
+  }
   get pagedReports() {
     const start = (this.reportPage - 1) * this.reportPageSize;
     return this.reports.slice(start, start + this.reportPageSize);
   }
   get reportTotalPages() {
-    return Math.ceil(this.reports.length / this.reportPageSize) || 1;
+    return Math.ceil(this.reportTotalCount / this.reportPageSize) || 1;
   }
-  changeReportPage(newPage: number) {
+  async changeReportPage(newPage: number) {
     if (newPage < 1 || newPage > this.reportTotalPages) return;
     this.reportPage = newPage;
+    await this.getAllReports();
   }
 
   getStatusClass(status: string) {
@@ -99,7 +110,10 @@ export class ReportListComponent implements OnInit {
     this.showSuccess = false;
   }
 
-  abrirResumen(tipo: 'reporte' | 'infraccion' | 'usuario', data: SumaryReportI) {
+  abrirResumen(
+    tipo: 'reporte' | 'infraccion' | 'usuario',
+    data: SumaryReportI
+  ) {
     // Arma el objeto de resumen con los campos necesarios
     this.summaryType = tipo;
     this.summaryData = {

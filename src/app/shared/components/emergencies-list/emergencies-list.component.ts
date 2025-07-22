@@ -23,10 +23,7 @@ export class EmergenciesListComponent implements OnInit {
   constructor(private services: ApiService) {}
 
   async ngOnInit() {
-    this.loading = true;
-    const resp = await this.services.getEmergencies();
-    this.emergencies = resp.data!.data;
-    this.loading = false;
+    await this.getEmergencies();
   }
   selectedLat = -2.216637;
   selectedLng = -79.927899;
@@ -43,13 +40,35 @@ export class EmergenciesListComponent implements OnInit {
     }, 10);
   }
 
+  // async getEmergencies() {
+  //   const skip = (this.emergencyPage - 1) * this.emergencyPageSize;
+  //   const resp = await this.services.getEmergencies(skip);
+  //   // Si tu servicio devuelve { count, data }
+  //   console.log(resp);
+  //   this.emergencies = resp.data!.data;
+  //   this.emergencyTotalCount = resp.data!.count;
+  // }
+
   async getEmergencies() {
     const skip = (this.emergencyPage - 1) * this.emergencyPageSize;
-    const resp = await this.services.getEmergencies(skip);
-    // Si tu servicio devuelve { count, data }
-    console.log(resp);
-    this.emergencies = resp.data!.data;
-    this.emergencyTotalCount = resp.data!.count;
+    this.loading = true;
+    try {
+      const resp = await this.services.getEmergencies(skip);
+      console.log(resp);
+      if (resp.code === 200) {
+        this.emergencies = resp.data!.data;
+        this.emergencyTotalCount = resp.data!.count;
+      } else {
+        this.emergencies = [];
+        this.emergencyTotalCount = 0;
+      }
+    } catch (err) {
+      this.emergencies = [];
+      this.emergencyTotalCount = 0;
+      // Opcional: mostrar alerta aquí
+    } finally {
+      this.loading = false;
+    }
   }
 
   get pagedEmergencies() {
