@@ -1,0 +1,48 @@
+<svg width="100" height="120" viewBox="0 0 100 120" xmlns="http://www.w3.org/2000/svg">
+  <!-- Sombra del marcador -->
+  <ellipse cx="50" cy="115" rx="15" ry="5" fill="rgba(0,0,0,0.2)"/>
+  
+  <!-- Marcador principal -->
+  <path d="M50 10 C70 10, 85 25, 85 45 C85 65, 50 95, 50 95 C50 95, 15 65, 15 45 C15 25, 30 10, 50 10 Z" 
+        fill="#DC2626" 
+        stroke="#B91C1C" 
+        stroke-width="2"/>
+  
+  <!-- Gradiente interno para dar profundidad -->
+  <defs>
+    <radialGradient id="emergencyGradient" cx="0.3" cy="0.3">
+      <stop offset="0%" stop-color="#EF4444"/>
+      <stop offset="100%" stop-color="#DC2626"/>
+    </radialGradient>
+    <radialGradient id="iconGradient" cx="0.3" cy="0.3">
+      <stop offset="0%" stop-color="#FFFFFF"/>
+      <stop offset="100%" stop-color="#F3F4F6"/>
+    </radialGradient>
+  </defs>
+  
+  <!-- Relleno con gradiente -->
+  <path d="M50 10 C70 10, 85 25, 85 45 C85 65, 50 95, 50 95 C50 95, 15 65, 15 45 C15 25, 30 10, 50 10 Z" 
+        fill="url(#emergencyGradient)"/>
+  
+  <!-- Círculo interior para el ícono -->
+  <circle cx="50" cy="42" r="20" fill="url(#iconGradient)" stroke="#DC2626" stroke-width="1"/>
+  
+  <!-- Cruz de emergencia médica -->
+  <rect x="47" y="32" width="6" height="20" fill="#DC2626" rx="1"/>
+  <rect x="42" y="37" width="16" height="6" fill="#DC2626" rx="1"/>
+  
+  <!-- Pulso de emergencia (animación) -->
+  <circle cx="50" cy="42" r="25" fill="none" stroke="#DC2626" stroke-width="2" opacity="0.6">
+    <animate attributeName="r" values="25;35;25" dur="2s" repeatCount="indefinite"/>
+    <animate attributeName="opacity" values="0.6;0;0.6" dur="2s" repeatCount="indefinite"/>
+  </circle>
+  
+  <!-- Segundo pulso desfasado -->
+  <circle cx="50" cy="42" r="30" fill="none" stroke="#FCA5A5" stroke-width="1" opacity="0.4">
+    <animate attributeName="r" values="30;40;30" dur="2s" begin="1s" repeatCount="indefinite"/>
+    <animate attributeName="opacity" values="0.4;0;0.4" dur="2s" begin="1s" repeatCount="indefinite"/>
+  </circle>
+  
+  <!-- Brillo en la parte superior -->
+  <ellipse cx="45" cy="30" rx="8" ry="4" fill="rgba(255,255,255,0.3)" transform="rotate(-15 45 30)"/>
+</svg>

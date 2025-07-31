@@ -35,10 +35,22 @@ export class ModalMapaComponent implements AfterViewChecked {
     if (this.map) {
       this.map.off().remove();
     }
+
     this.map = L.map('view-map').setView([this.lat, this.lng], 18);
+
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '© OpenStreetMap contributors',
     }).addTo(this.map);
-    this.marker = L.marker([this.lat, this.lng]).addTo(this.map);
+
+    const customIcon = L.icon({
+      iconUrl: 'assets/pointer.svg',
+      iconSize: [40, 40],
+      iconAnchor: [20, 40],
+      popupAnchor: [0, -40],
+    });
+
+    this.marker = L.marker([this.lat, this.lng], { icon: customIcon }).addTo(
+      this.map
+    );
   }
 }
