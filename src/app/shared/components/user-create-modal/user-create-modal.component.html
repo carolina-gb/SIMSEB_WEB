@@ -4,10 +4,6 @@
       <h2 class="text-xl font-bold mb-6 text-gray-700">Crear usuario</h2>
       <form (ngSubmit)="onSubmit()" autocomplete="off" class="flex flex-col gap-4">
         <div>
-          <label class="block font-semibold mb-1">Nombre de usuario</label>
-          <input type="text" class="w-full border rounded-lg p-2 bg-gray-50" [(ngModel)]="user.username" name="username" required />
-        </div>
-        <div>
           <label class="block font-semibold mb-1">Nombre</label>
           <input type="text" class="w-full border rounded-lg p-2 bg-gray-50" [(ngModel)]="user.name" name="name" required />
         </div>

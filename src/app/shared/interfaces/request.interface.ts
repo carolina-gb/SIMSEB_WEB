@@ -14,7 +14,6 @@ export interface UserUpdateRequestI {
 }
 
 export interface UserCreateRequestI {
-  username: string;
   name: string;
   lastName: string;
   identification: string;

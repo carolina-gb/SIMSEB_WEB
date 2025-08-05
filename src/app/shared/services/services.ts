@@ -8,6 +8,7 @@ import {
   InfractionCreateRequestI,
   LoginRequestI,
   ReportUpdateRequestI,
+  UserCreateRequestI,
   UserUpdateRequestI,
 } from '../interfaces/request.interface';
 import {
@@ -262,14 +263,7 @@ export class ApiService {
   }
 
   // --- USUARIOS ---
-  async createUser(userData: {
-    username: string;
-    name: string;
-    lastName: string;
-    identification: string;
-    email: string;
-    typeId: number;
-  }): Promise<
+  async createUser(userData: UserCreateRequestI): Promise<
     ApiResponse<{
       userId: string;
       username: string;

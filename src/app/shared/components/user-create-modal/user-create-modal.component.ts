@@ -17,7 +17,6 @@ export class UserCreateModalComponent implements OnInit {
   show = true;
   isSuperuser = false;
   user = {
-    username: '',
     name: '',
     lastName: '',
     identification: '',
@@ -59,7 +58,6 @@ export class UserCreateModalComponent implements OnInit {
   }
   onSubmit() {
     if (
-      !this.user.username ||
       !this.user.name ||
       !this.user.lastName ||
       !this.isValidIdentification(this.user.identification) ||
