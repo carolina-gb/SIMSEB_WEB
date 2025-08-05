@@ -22,6 +22,7 @@ import { AlertModalComponent } from '../../../shared/components/alert-modal/aler
 export class LoginComponent {
   username = '';
   password = '';
+  showPassword: boolean = false;
   loading = false;
   error = '';
   loginError = false;
@@ -36,6 +37,11 @@ export class LoginComponent {
   get canLogin() {
     return this.username?.trim() && this.password?.trim();
   }
+  
+  togglePasswordVisibility() {
+    this.showPassword = !this.showPassword;
+  }
+
   async onSubmit() {
     this.error = '';
     this.loading = true;
