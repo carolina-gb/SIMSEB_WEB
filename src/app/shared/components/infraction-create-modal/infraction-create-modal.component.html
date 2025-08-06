@@ -58,3 +58,11 @@
     </form>
   </div>
 </div>
+
+<app-alert-modal
+  [open]="showAlert"
+  type="warning"
+  [title]="alertTitle"
+  [message]="alertMessage"
+  (close)="cerrarAlerta()"
+></app-alert-modal>

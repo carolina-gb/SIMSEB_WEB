@@ -1,33 +1,91 @@
-<div class="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-50">
-    <div class="bg-white rounded-2xl shadow-xl max-w-md w-full p-8 relative">
-      <button class="absolute top-2 right-2 text-gray-400 hover:text-gray-700 text-xl" (click)="onClose()">×</button>
-      <h2 class="text-xl font-bold mb-6 text-gray-700">Crear usuario</h2>
-      <form (ngSubmit)="onSubmit()" autocomplete="off" class="flex flex-col gap-4">
-        <div>
-          <label class="block font-semibold mb-1">Nombre</label>
-          <input type="text" class="w-full border rounded-lg p-2 bg-gray-50" [(ngModel)]="user.name" name="name" required />
-        </div>
-        <div>
-          <label class="block font-semibold mb-1">Apellido</label>
-          <input type="text" class="w-full border rounded-lg p-2 bg-gray-50" [(ngModel)]="user.lastName" name="lastName" required />
-        </div>
-        <div>
-          <label class="block font-semibold mb-1">Identificación</label>
-          <input type="text" class="w-full border rounded-lg p-2 bg-gray-50" [(ngModel)]="user.identification" name="identification" required maxlength="15"/>
-        </div>
-        <div>
-          <label class="block font-semibold mb-1">Correo electrónico</label>
-          <input type="email" class="w-full border rounded-lg p-2 bg-gray-50" [(ngModel)]="user.email" name="email" required />
-        </div>
-        <div *ngIf="isSuperuser">
-          <label class="block font-semibold mb-1">Tipo</label>
-          <select class="w-full border rounded-lg p-2 bg-gray-50" [(ngModel)]="user.typeName" name="typeName" required>
-            <option value="" disabled selected>Selecciona un tipo</option>
-            <option *ngFor="let type of typeOptions" [value]="type.value">{{type.label}}</option>
-          </select>
-        </div>
-        <button type="submit" class="bg-blue-600 text-white font-semibold px-6 py-2 rounded-lg hover:bg-blue-700 transition mt-2">Crear</button>
-      </form>
-    </div>
+<div
+  class="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-50"
+>
+  <div class="bg-white rounded-2xl shadow-xl max-w-md w-full p-8 relative">
+    <button
+      class="absolute top-2 right-2 text-gray-400 hover:text-gray-700 text-xl"
+      (click)="onClose()"
+    >
+      ×
+    </button>
+    <h2 class="text-xl font-bold mb-6 text-gray-700">Crear usuario</h2>
+    <form
+      (ngSubmit)="onSubmit()"
+      autocomplete="off"
+      class="flex flex-col gap-4"
+    >
+      <div>
+        <label class="block font-semibold mb-1">Nombre</label>
+        <input
+          type="text"
+          class="w-full border rounded-lg p-2 bg-gray-50"
+          [(ngModel)]="user.name"
+          name="name"
+          required
+        />
+      </div>
+      <div>
+        <label class="block font-semibold mb-1">Apellido</label>
+        <input
+          type="text"
+          class="w-full border rounded-lg p-2 bg-gray-50"
+          [(ngModel)]="user.lastName"
+          name="lastName"
+          required
+        />
+      </div>
+      <div>
+        <label class="block font-semibold mb-1">Identificación</label>
+        <input
+          type="text"
+          class="w-full border rounded-lg p-2 bg-gray-50"
+          [(ngModel)]="user.identification"
+          name="identification"
+          required
+          maxlength="10"
+          (blur)="onIdentificationBlur()"
+        />
+        <p *ngIf="identificationInvalid" class="text-red-500 text-sm mt-1">
+          Cédula no válida, revise que sea la correcta.
+        </p>
+      </div>
+      <div>
+        <label class="block font-semibold mb-1">Correo electrónico</label>
+        <input
+          type="email"
+          class="w-full border rounded-lg p-2 bg-gray-50"
+          [(ngModel)]="user.email"
+          name="email"
+          required
+        />
+      </div>
+      <div *ngIf="isSuperuser">
+        <label class="block font-semibold mb-1">Tipo</label>
+        <select
+          class="w-full border rounded-lg p-2 bg-gray-50"
+          [(ngModel)]="user.typeName"
+          name="typeName"
+          required
+        >
+          <option value="" disabled selected>Selecciona un tipo</option>
+          <option *ngFor="let type of typeOptions" [value]="type.value">
+            {{ type.label }}
+          </option>
+        </select>
+      </div>
+      <button
+        type="submit"
+        class="bg-blue-600 text-white font-semibold px-6 py-2 rounded-lg hover:bg-blue-700 transition mt-2"
+      >
+        Crear
+      </button>
+    </form>
   </div>
-  
+</div>
+<app-alert-modal
+  [open]="showAlert"
+  type="warning"
+  [title]="alertTitle"
+  [message]="alertMessage"
+  (close)="cerrarAlerta()"
+></app-alert-modal>

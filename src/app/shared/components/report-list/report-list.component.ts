@@ -111,7 +111,7 @@ export class ReportListComponent implements OnInit {
   }
 
   abrirResumen(
-    tipo: 'reporte' | 'infraccion' | 'usuario',
+    tipo: 'reporte',
     data: SumaryReportI
   ) {
     // Arma el objeto de resumen con los campos necesarios
