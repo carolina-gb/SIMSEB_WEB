@@ -36,3 +36,9 @@ export interface InfractionCreateRequestI {
   userId: string,
   typeId: number
 }
+
+export interface ReportingRequestI {
+  initialDate: Date | string;
+  endDate: Date | string;
+  reportingType: string;
+}

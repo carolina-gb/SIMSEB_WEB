@@ -53,7 +53,15 @@
       <i data-lucide="users" class="w-5 h-5"></i>
       Usuarios
     </a>
-
+    <a
+      routerLink="/reporting"
+      routerLinkActive="bg-blue-50 text-blue-700"
+      class="flex items-center gap-3 rounded-xl px-3 py-2 font-medium text-base text-slate-600 transition hover:bg-blue-50"
+      (click)="closeSidebar()"
+    >
+      <i data-lucide="bar-chart" class="w-5 h-5"></i>
+      Reporteria
+    </a>
     <div class="flex-1"></div>
     <a
       (click)="logout()"

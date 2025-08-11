@@ -7,6 +7,7 @@ import { ReportI } from '../interfaces/report.interface';
 import {
   InfractionCreateRequestI,
   LoginRequestI,
+  ReportingRequestI,
   ReportUpdateRequestI,
   UserCreateRequestI,
   UserUpdateRequestI,
@@ -20,6 +21,7 @@ import {
   UserListData,
 } from '../interfaces/response.interface';
 import { firstValueFrom } from 'rxjs';
+import { ServiceResponseData } from '../interfaces/reporting.interface';
 
 @Injectable({ providedIn: 'root' })
 export class ApiService {
@@ -429,6 +431,33 @@ export class ApiService {
         code: error?.status || 500,
         message: error?.error?.message || 'Error de red',
         data: { count: 0, data: [] },
+      };
+    }
+  }
+  // --- Reporteria ---
+  async getReporting(
+    request: ReportingRequestI
+  ): Promise<ApiResponse<ServiceResponseData>> {
+    const url = `${this.baseUrl}/Reporting`;
+    const params = new HttpParams()
+      .set('initialDate', request.initialDate.toString())
+      .set('endDate', request.endDate.toString())
+      .set('typeReport', request.reportingType); // Por si quieres paginar, si no lo quitas
+    try {
+      const resp = await firstValueFrom(
+        this.http.get<ApiResponse<ServiceResponseData>>(url, { params })
+      );
+      if (resp) return resp;
+      return {
+        code: 500,
+        message: 'No response from server',
+        data: null,
+      };
+    } catch (error: any) {
+      return {
+        code: error?.status || 500,
+        message: error?.error?.message || 'Error de red',
+        data: null,
       };
     }
   }

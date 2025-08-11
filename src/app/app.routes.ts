@@ -9,10 +9,10 @@ import { UsersComponent } from './modules/users/users.component';
 import { ReportDetailsComponent } from './modules/report-details/report-details.component';
 import { UserDetailsComponent } from './modules/user-details/user-details.component';
 import { AuthTypeGuard } from './shared/guards/auth.guard';
+import { ReporteriaComponent } from './shared/components/reporting/reporting.component';
 // ...otros componentes
 
 export const routes: Routes = [
-
   // Redirección por defecto: root => login
   { path: '', pathMatch: 'full', redirectTo: 'login' },
 
@@ -33,6 +33,8 @@ export const routes: Routes = [
       { path: 'users', component: UsersComponent },
       { path: 'reports/:id', component: ReportDetailsComponent },
       { path: 'users/:userId', component: UserDetailsComponent },
+      { path: 'reporting', component: ReporteriaComponent },
+
       // más rutas privadas
     ],
   },
