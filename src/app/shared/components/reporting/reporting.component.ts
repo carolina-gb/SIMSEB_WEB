@@ -115,7 +115,7 @@ export class ReporteriaComponent {
         })
       );
       nombreArchivo = 'reporte_emergencias.xlsx';
-    } else if (this.tipoReporte === 'Infracción' && this.infracciones) {
+    } else if (this.tipoReporte === 'Infraccion' && this.infracciones) {
       dataParaExportar = Object.entries(this.infracciones.infracciones).map(
         ([nivel, datos]: any) => ({
           Nivel: nivel,
